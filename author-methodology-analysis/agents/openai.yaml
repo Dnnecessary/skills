@@ -1,0 +1,4 @@
+interface:
+  display_name: "作者内容方法论分析"
+  short_description: "分析博主方法论并生成学习者视角 HTML 看板"
+  default_prompt: "使用 $author-methodology-analysis 分析这些文章，生成方法论报告、文案框架和学习者视角 HTML 看板，重点说明我应该学习什么以及我要怎么学。"
