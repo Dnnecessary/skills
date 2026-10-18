@@ -1,0 +1,13 @@
+{
+  "name": "xdxlab-viral-cards",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "把内容做成会涨粉的小红书爆款图文",
+  "scripts": {
+    "validate": "node validate-cards.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}
