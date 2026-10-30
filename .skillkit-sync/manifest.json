@@ -133,6 +133,11 @@
     },
     {
       "tool": "workbuddy",
+      "relative": "wechat-article-extractor",
+      "payload": "2dcabc8ec406adf04f53a0b8ce7c12c23a7f01b9a92fe35f7afa59a5cab36470"
+    },
+    {
+      "tool": "workbuddy",
       "relative": "xdxlab-viral-cards",
       "payload": "ca72afe0b7280810d634331e6d870eea2ed9738919fe3576665aa13e33aa7a82"
     },
