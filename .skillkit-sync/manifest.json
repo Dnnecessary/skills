@@ -133,6 +133,11 @@
     },
     {
       "tool": "workbuddy",
+      "relative": "wechat-article-archive",
+      "payload": "0bf17cf07327ba763fe2d0fd2c2ca53380be4b07c96ddce8a7395b0b385faf14"
+    },
+    {
+      "tool": "workbuddy",
       "relative": "wechat-article-extractor",
       "payload": "2dcabc8ec406adf04f53a0b8ce7c12c23a7f01b9a92fe35f7afa59a5cab36470"
     },
