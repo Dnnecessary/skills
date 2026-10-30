@@ -73,6 +73,11 @@
     },
     {
       "tool": "global",
+      "relative": "z-md-to-pdf",
+      "payload": "8f16672e1852a82f8fcec50d86c382edf192f77c808140815ba912c20ed51dc2"
+    },
+    {
+      "tool": "global",
       "relative": "z-wanghong-handwritten-ppt",
       "payload": "8926f82f3d350ac89bdb47923e0bf741b0899f6eb6ee06b986a6b77a5ded5343"
     },
@@ -150,6 +155,11 @@
       "tool": "workbuddy",
       "relative": "xlsx",
       "payload": "56c692298d14b9a827b7fe0e35074121469852feaf9897a1cc9e14844302e7f9"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "z-md-to-pdf",
+      "payload": "ea68839512ac29a88328c9220e9a81e996ff0a5c44ab89af34237cad1f3d9481"
     },
     {
       "tool": "workbuddy",
