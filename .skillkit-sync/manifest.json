@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "tool": "global",
+      "relative": "agent-reach",
+      "payload": "2e592ab483e04602a16f34ae02b6cc4779aadb9c9fc8cdb95258e740b8de4245"
+    },
+    {
+      "tool": "global",
+      "relative": "author-methodology-analysis",
+      "payload": "0b46a2037f5ca268d88e533acc5dd8eee430efe54a2b7e6c962a8b590de6b42a"
+    },
+    {
+      "tool": "global",
+      "relative": "docx",
+      "payload": "143e0baafa3fe42840215fd971c54d1ef04a946d725f7b64a74329ccc2c43043"
+    },
+    {
+      "tool": "global",
+      "relative": "gzh-design",
+      "payload": "3f7b0f050621b885c8a22fcbed456daeff3ee66629372ce67d370396b2a147bf"
+    },
+    {
+      "tool": "global",
+      "relative": "gzh-title-strategist",
+      "payload": "69a24a6e9b78964b9b1ca5403a4ece8e61169105175d0b344c375088a5a1cf80"
+    },
+    {
+      "tool": "global",
+      "relative": "ian-xiaohei-illustrations",
+      "payload": "76b91ef0834ed546dd3dee0b2c124c5f7281edb27027eb823768f87894cedb23"
+    },
+    {
+      "tool": "global",
+      "relative": "officecli",
+      "payload": "7e14b3a4d518d2abc88cba4d6c23cedc556fd536ae536f92a42faec2ff98ac73"
+    },
+    {
+      "tool": "global",
+      "relative": "pdf",
+      "payload": "666d359a8e597fc364ac933cae6092ee7de1d063fd6e1d3bfe14fbeae8406b09"
+    },
+    {
+      "tool": "global",
+      "relative": "qiaomu-bento-ppt",
+      "payload": "cc543730298a2155f5fff9a474f0efff7efb0a74135c4a8ebb194d3edfc2d48e"
+    },
+    {
+      "tool": "global",
+      "relative": "question-bank",
+      "payload": "21e735bfa1eb9e4962ac3ac76ba9be6f228fd80a74f04a7c82f99d1b0769fe8e"
+    },
+    {
+      "tool": "global",
+      "relative": "wechat-article-archive",
+      "payload": "ceaec4f0151533687984fe42d0faf8142e737113c1e53e47cf4440bc99ea686a"
+    },
+    {
+      "tool": "global",
+      "relative": "wechat-article-extractor",
+      "payload": "fa2eeff0ce3bc6e5d79c4525f49b4f7de7e18c787896ee71c198e8e8ce6620bf"
+    },
+    {
+      "tool": "global",
+      "relative": "xdxlab-viral-cards",
+      "payload": "dd5787ecebb76a8c71807bed8b5668fcf1084804c6fee5eae5cfe2c442685599"
+    },
+    {
+      "tool": "global",
+      "relative": "xlsx",
+      "payload": "2bb8bb1449f8a27bfe1fac2b0a441bbc7a78b09025bc651997557daefcea5e1d"
+    },
+    {
+      "tool": "global",
+      "relative": "z-wanghong-handwritten-ppt",
+      "payload": "8926f82f3d350ac89bdb47923e0bf741b0899f6eb6ee06b986a6b77a5ded5343"
+    },
+    {
+      "tool": "qoder",
+      "relative": "impeccable",
+      "payload": "167b2cdba235b55ca8bb0625f6bb88bdb377356db8c511e72d0e7145fbe665bb"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "agent-reach",
+      "payload": "fcc5cb404ca4ddc52c09c980e3b1251908aaa7b21a85a647b21890fdc7557881"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "author-methodology-analysis",
+      "payload": "4c634662d26e36079b2a9db4bc17c5a577e1e4ef07f9ed033b3a09260b7fce6a"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "docx",
+      "payload": "fad88f521b7d0aedf309969cf2d75737e6c0ed73ea8e248872a8a26913f2df5f"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "gzh-design",
+      "payload": "46ba0b28c15e299c0edaa5c94986289beafc1dd37752dec6bbac8d9244206080"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "gzh-title-strategist",
+      "payload": "bc6af7de234073b3594ef3ad8ac7b65e4a9f397e70b7f543b03b1891f68ca5ea"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "ian-xiaohei-illustrations",
+      "payload": "85a7fe2b484367cd58f390d9c23b3c7ffbe246eed5ad3e998623ecb1865bf570"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "lieflat-gongwen",
+      "payload": "eccf9330c39d04d6e25ae2321512f76d45207958773c0b5fe007388e35199181"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "officecli",
+      "payload": "fa0b0253ae01274439304c266a4d8e41fd5ad05d0b52de05de9bd496750d5ef7"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "pdf",
+      "payload": "cedfbd83928b5cb8d2f9040627a1d3b1175499b0b90703c20574d60e98112018"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "question-bank",
+      "payload": "a77d66a0a1c167a403dbea6729cd0f5c68fd38125060e01afc9ee941a1d3a5da"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "xdxlab-viral-cards",
+      "payload": "ca72afe0b7280810d634331e6d870eea2ed9738919fe3576665aa13e33aa7a82"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "xlsx",
+      "payload": "56c692298d14b9a827b7fe0e35074121469852feaf9897a1cc9e14844302e7f9"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "z-wanghong-handwritten-ppt",
+      "payload": "302f7297b4185ffc555777f69e34f9b2d87dec02883ea901a7874bd5db5078a3"
+    }
+  ]
+}

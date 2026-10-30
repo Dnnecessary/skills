@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-style="minimal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>极简冲击风 模板</title>
+  <link rel="stylesheet" href="base.css">
+  <style>
+    /* ===== minimal token（来自 style-presets.md）===== */
+    [data-style="minimal"] {
+      --bg: #14181F;
+      --ink: #F4F1E9;
+      --ink-soft: #8A9099;
+      --accent: #F4F1E9;
+      --accent-soft: #232A35;
+
+      --font-display: "Smiley Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-body: "PingFang SC", "Microsoft YaHei", sans-serif;
+      --pad: 80px;
+
+      --fs-cover-title: 140px;
+      --fs-h1: 96px;
+      --fs-body: 30px;
+      --fs-caption: 24px;
+      --radius: 0px;
+      --hairline: 3px;
+      --line-color: #F4F1E9;
+    }
+
+    /* ===== minimal 版式 ===== */
+    .poster {
+      background: radial-gradient(125% 90% at 50% 32%, #1B2231, var(--bg) 70%);
+      color: var(--ink);
+      padding: var(--pad);
+      font-family: var(--font-body);
+      box-shadow: inset 0 0 240px rgba(0, 0, 0, 0.45);
+    }
+
+    /* —— 封面：一句话顶满 —— */
+    .mn-index {
+      font-size: var(--fs-caption);
+      letter-spacing: 6px;
+      color: var(--ink-soft);
+    }
+    .mn-cover-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: var(--fs-cover-title);
+      line-height: 1.04;
+      letter-spacing: -2px;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    .mn-cover-title .u {
+      position: relative;
+      display: inline-block;
+    }
+    .mn-cover-title .u::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -10px; right: 0;
+      height: var(--hairline);
+      background: var(--line-color);
+    }
+
+    /* 封面底栏 */
+    .mn-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: var(--fs-caption);
+      letter-spacing: 3px;
+      color: var(--ink-soft);
+    }
+
+    /* —— 内容页：极简单点陈述 + 大量负空间 —— */
+    .mn-content-poster {
+      justify-content: center;
+    }
+    .mn-step {
+      font-size: var(--fs-caption);
+      letter-spacing: 8px;
+      color: var(--ink-soft);
+      margin-bottom: 60px;
+    }
+    .mn-h1 {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: var(--fs-h1);
+      line-height: 1.18;
+      letter-spacing: -1px;
+    }
+    .mn-h1 .soft { color: var(--ink-soft); }
+    .mn-rule {
+      width: 140px;
+      height: var(--hairline);
+      background: var(--line-color);
+      margin: 64px 0;
+    }
+    .mn-body {
+      font-size: 40px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--ink);
+      max-width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+
+    <!-- ===== 封面页 ===== -->
+    <section class="poster">
+      <div class="mn-index">态度 / 01</div>
+
+      <h1 class="mn-cover-title">
+        别等<br>
+        准备好<br>
+        <span class="u">再开始</span>
+      </h1>
+
+      <div class="foot mn-foot">
+        <span>NO EXCUSES</span>
+        <span>@一个人的态度</span>
+      </div>
+    </section>
+
+    <!-- POSTERS_HERE: 复制 .poster 区块来增加页数 -->
+
+    <!-- ===== 内容页 ===== -->
+    <section class="poster mn-content-poster">
+      <div class="mn-step">为什么</div>
+
+      <h2 class="mn-h1">
+        "准备好"<br>
+        <span class="soft">从来</span>不会<br>
+        自己来。
+      </h2>
+
+      <div class="mn-rule"></div>
+
+      <p class="mn-body">它是你开始之后，一步步攒出来的。先动，再修正。</p>
+
+      <div class="foot mn-foot">
+        <span>02 / 02</span>
+        <span>@一个人的态度</span>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

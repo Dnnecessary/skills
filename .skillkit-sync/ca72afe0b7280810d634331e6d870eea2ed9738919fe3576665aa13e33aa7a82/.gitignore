@@ -1,0 +1,4 @@
+node_modules/
+output/
+*.local
+.DS_Store
