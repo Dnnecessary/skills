@@ -18,11 +18,6 @@
     },
     {
       "tool": "global",
-      "relative": "gzh-design",
-      "payload": "3f7b0f050621b885c8a22fcbed456daeff3ee66629372ce67d370396b2a147bf"
-    },
-    {
-      "tool": "global",
       "relative": "gzh-title-strategist",
       "payload": "69a24a6e9b78964b9b1ca5403a4ece8e61169105175d0b344c375088a5a1cf80"
     },
@@ -103,8 +98,8 @@
     },
     {
       "tool": "workbuddy",
-      "relative": "gzh-design",
-      "payload": "46ba0b28c15e299c0edaa5c94986289beafc1dd37752dec6bbac8d9244206080"
+      "relative": "gzh-design-custom",
+      "payload": "2c9ecadcb12d292c0e33311fe0dd33139328c4148a8d98c58ed90db2e08fd036"
     },
     {
       "tool": "workbuddy",
