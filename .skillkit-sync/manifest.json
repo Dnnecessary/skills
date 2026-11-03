@@ -2,6 +2,16 @@
   "version": 1,
   "entries": [
     {
+      "tool": "claude",
+      "relative": "easyunslop",
+      "payload": "c8a654d4be2f06ed04ae88585e1195efd88e6650d47ee9bc02c186401c5f1a09"
+    },
+    {
+      "tool": "codex",
+      "relative": "easyunslop",
+      "payload": "4f84c3d96bb3108f5565fe0737f46d0c76f9360cb618c38db94a05e20926dbd9"
+    },
+    {
       "tool": "global",
       "relative": "agent-reach",
       "payload": "2e592ab483e04602a16f34ae02b6cc4779aadb9c9fc8cdb95258e740b8de4245"
@@ -15,6 +25,11 @@
       "tool": "global",
       "relative": "docx",
       "payload": "143e0baafa3fe42840215fd971c54d1ef04a946d725f7b64a74329ccc2c43043"
+    },
+    {
+      "tool": "global",
+      "relative": "easyunslop",
+      "payload": "20d5f578a35ec6842da8785b2eae562b0d0ec760d0f75f44f59080e8134314dc"
     },
     {
       "tool": "global",
@@ -95,6 +110,11 @@
       "tool": "workbuddy",
       "relative": "docx",
       "payload": "fad88f521b7d0aedf309969cf2d75737e6c0ed73ea8e248872a8a26913f2df5f"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "easyunslop",
+      "payload": "a145d8e1db85110a4d71259e4a5d1c70bb0270be84d866439908856f9724e09f"
     },
     {
       "tool": "workbuddy",

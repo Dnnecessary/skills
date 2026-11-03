@@ -9,7 +9,7 @@
 | 主题 | 主色 | 适用场景 | 组件库文件 | 正文下划线 CSS |
 |------|------|---------|-----------|---------------|
 | 摸鱼绿 | `#059669` emerald | 教程、测评、清单、工具盘点（卡片丰富、信息密度高，默认推荐） | `references/theme-moyu-green.md` | `border-bottom:2px solid #A7F3D0;font-weight:600;` |
-| 摸鱼绿纸感 | `#059669` emerald（配米黄纸感底 `#FFFEF8`） | 教程、测评、清单、复盘、经验分享（以摸鱼绿为母本：组件骨架原样，配色换成摸鱼票据风的纸感——米黄底 + 墨黑标题 + 暖灰阶，卡片浮在纸面上，比摸鱼绿温和耐读） | `references/theme-moyu-green-paper.md` | `border-bottom:2px solid #A7F3D0;font-weight:600;` |
+| 摸鱼绿纸感 | `#059669` emerald（配米黄纸感底 `#FFFEF8`） | 教程、测评、清单、复盘、经验分享（**组件主体直接调用摸鱼票据风**：章节标题 / 小节标题 / 正文 / 结论卡 / 编号列表 / 核心观点卡 / 标签组 / footer 全部票据风原样；只有开头「封面引言卡」和「浅边金句卡（组件 11 变体 B，边框同封面）」是纸感自有——白卡 + 暖灰**虚线边 + 圆角 8px** + 大字金句，比票据封面安静克制；话题标签为小圆角标签（6px），结尾用摸鱼绿 13a 圆角卡；正文**重点高亮 6b 用本主题专用黄底 `#FBEEB1`**，其余绿色标记不变） | `references/theme-moyu-green-paper.md` | `border-bottom:2px solid #A7F3D0;font-weight:600;` |
 | 红白色系 | `#DC2626` 正红 | 深度分析、观点、力量感话题（经典编辑风，编号章节+引言卡+签名区，红色克制点睛） | `references/theme-red-white.md` | `border-bottom:2px solid #FECACA;font-weight:600;` |
 | 石墨极简风 | `#52525B` 石墨灰 | 设计、科技评论、专业观点、高端品牌（极简克制、留白理性、全灰阶） | `references/theme-graphite-minimal.md` | `border-bottom:2px solid #52525B;font-weight:600;` |
 | 留白禅意风 | `#4A5D52` 墨绿 | 禅意冥想、极简生活、深度随笔、艺术留白（呼吸感最强） | `references/theme-zen-whitespace.md` | `border-bottom:1.5px solid #B5C8BC;font-weight:500;` |
