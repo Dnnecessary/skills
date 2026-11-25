@@ -1,0 +1,4 @@
+interface:
+  display_name: "微信公众号文章归档"
+  short_description: "采集公开微信文章并生成可校验的本地归档与 ZIP"
+  default_prompt: "Use $wechat-article-archive to archive the requested number of recent WeChat articles (default 50) with local images and a validated ZIP."

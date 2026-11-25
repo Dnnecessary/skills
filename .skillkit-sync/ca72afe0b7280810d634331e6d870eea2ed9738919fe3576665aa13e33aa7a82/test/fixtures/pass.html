@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校验夹具 pass</title>
+  <link rel="stylesheet" href="../../assets/base.css">
+  <style>
+    .poster {
+      background: #FBF6EC;
+      color: #211C18;
+      padding: var(--pad);
+      font-family: var(--font-body);
+    }
+    .pass-title {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    .pass-body {
+      font-size: 32px; /* >= 28，正文 */
+      line-height: 1.6;
+      margin-top: 32px;
+    }
+    .pass-block {
+      margin-top: 48px;
+      font-size: 32px;
+      line-height: 1.6;
+      background: #fff;
+      border: 3px solid #211C18;
+      border-radius: 16px;
+      padding: 32px;
+    }
+    .foot {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-top: 40px;
+    }
+    .foot .name {
+      font-size: 24px; /* >= 22，注脚 */
+      font-weight: 800;
+    }
+    .foot .hint {
+      margin-left: auto;
+      font-size: 24px; /* >= 22，注脚 */
+      color: #6B6258;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <section class="poster">
+      <h1 class="pass-title">合规校验夹具页</h1>
+      <p class="pass-body">这是用于校验脚本测试的合规页面，正文字号 32px，满足 28px 以上的下限要求，内容分布在画布的多个纵向区间内，不会触发密度警告。</p>
+      <div class="pass-block">这是第二段内容块，进一步填充画布的中部区域，确保四等分密度检测不会触发 WARN。文字内容足够多，行高也设置为 1.6，整体高度不会超过画布的 1440px。</div>
+      <div class="pass-block">这是第三段内容块，继续填充画布的下半部分区域，使内容尽量铺满整张海报，从而通过 R4 密度检测。底栏紧随其后，不与本段内容发生碰撞。</div>
+      <figure class="foot">
+        <span class="name">@示例账号</span>
+        <span class="hint">合规示例 · 校验通过</span>
+      </figure>
+    </section>
+  </div>
+</body>
+</html>

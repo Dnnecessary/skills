@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Author Methodology Analysis Data",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "input_root",
+    "dataset_sha256",
+    "sample_policy",
+    "sync_policy",
+    "summary",
+    "articles",
+    "skipped",
+    "annotations"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "dataset_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+    "sample_policy": {
+      "type": "object",
+      "required": ["article_count", "mode", "trend_allowed"]
+    },
+    "sync_policy": {
+      "type": "object",
+      "required": [
+        "public_url_count",
+        "all_sources_public",
+        "sensitive_signal_count",
+        "requires_confirmation"
+      ]
+    },
+    "articles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source_file",
+          "title",
+          "text_sha256",
+          "char_count",
+          "images"
+        ]
+      }
+    },
+    "annotations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension",
+          "label",
+          "article_ids",
+          "evidence",
+          "rule",
+          "confidence"
+        ]
+      }
+    }
+  }
+}

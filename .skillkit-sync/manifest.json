@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "tool": "claude",
+      "relative": "easyunslop",
+      "payload": "c8a654d4be2f06ed04ae88585e1195efd88e6650d47ee9bc02c186401c5f1a09"
+    },
+    {
+      "tool": "codex",
+      "relative": "easyunslop",
+      "payload": "4f84c3d96bb3108f5565fe0737f46d0c76f9360cb618c38db94a05e20926dbd9"
+    },
+    {
+      "tool": "doubao",
+      "relative": "xlsx",
+      "payload": "ff690a40faa65950b91bf5388b2f886f08410e05ab2a39474e799854d588c4e3"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "agent-reach",
+      "payload": "fcc5cb404ca4ddc52c09c980e3b1251908aaa7b21a85a647b21890fdc7557881"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "author-methodology-analysis",
+      "payload": "4c634662d26e36079b2a9db4bc17c5a577e1e4ef07f9ed033b3a09260b7fce6a"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "book-to-skill",
+      "payload": "934113d18722da225d8de32b49f84dc5c6f795479b63632b9966774d0a15eef1"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "docx",
+      "payload": "fad88f521b7d0aedf309969cf2d75737e6c0ed73ea8e248872a8a26913f2df5f"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "easyunslop",
+      "payload": "a145d8e1db85110a4d71259e4a5d1c70bb0270be84d866439908856f9724e09f"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "gzh-design-custom",
+      "payload": "2c9ecadcb12d292c0e33311fe0dd33139328c4148a8d98c58ed90db2e08fd036"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "gzh-title-strategist",
+      "payload": "bc6af7de234073b3594ef3ad8ac7b65e4a9f397e70b7f543b03b1891f68ca5ea"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "ian-xiaohei-illustrations",
+      "payload": "85a7fe2b484367cd58f390d9c23b3c7ffbe246eed5ad3e998623ecb1865bf570"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "lieflat-gongwen",
+      "payload": "eccf9330c39d04d6e25ae2321512f76d45207958773c0b5fe007388e35199181"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "officecli",
+      "payload": "fa0b0253ae01274439304c266a4d8e41fd5ad05d0b52de05de9bd496750d5ef7"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "pdf",
+      "payload": "cedfbd83928b5cb8d2f9040627a1d3b1175499b0b90703c20574d60e98112018"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "question-bank",
+      "payload": "a77d66a0a1c167a403dbea6729cd0f5c68fd38125060e01afc9ee941a1d3a5da"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "wechat-article-archive",
+      "payload": "0bf17cf07327ba763fe2d0fd2c2ca53380be4b07c96ddce8a7395b0b385faf14"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "wechat-article-extractor",
+      "payload": "2dcabc8ec406adf04f53a0b8ce7c12c23a7f01b9a92fe35f7afa59a5cab36470"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "writing-dna-skill",
+      "payload": "5e82ac46ebbcacb7ac093e553bf61d07a17c98bacaf81abcd79465d24d3e8eed"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "xdxlab-viral-cards",
+      "payload": "ca72afe0b7280810d634331e6d870eea2ed9738919fe3576665aa13e33aa7a82"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "xlsx",
+      "payload": "56c692298d14b9a827b7fe0e35074121469852feaf9897a1cc9e14844302e7f9"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "yeshengtao-writing-reading",
+      "payload": "2cd090c76492639cd43410c32191f00ad38f54d3c50535460298aca3556ff1e7"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "z-md-to-pdf",
+      "payload": "ea68839512ac29a88328c9220e9a81e996ff0a5c44ab89af34237cad1f3d9481"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "z-wanghong-handwritten-ppt",
+      "payload": "302f7297b4185ffc555777f69e34f9b2d87dec02883ea901a7874bd5db5078a3"
+    }
+  ]
+}

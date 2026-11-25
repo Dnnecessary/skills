@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-style="baokuan">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>爆款原生风 模板</title>
+  <link rel="stylesheet" href="base.css">
+  <style>
+    /* ===== baokuan token（来自 style-presets.md）===== */
+    [data-style="baokuan"] {
+      --bg: #FBF6EC;
+      --ink: #211C18;
+      --ink-soft: #6B6258;
+      --accent: #F06A2E;
+      --accent-soft: #FCE3C4;
+
+      --font-display: "Smiley Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-body: "PingFang SC", "Microsoft YaHei", sans-serif;
+      --pad: 64px;
+
+      --fs-cover-title: 116px;
+      --fs-h1: 64px;
+      --fs-body: 32px;
+      --fs-caption: 24px;
+      --radius: 16px;
+      --hairline: 4px;
+      --line-color: #211C18;
+    }
+
+    /* ===== baokuan 版式 ===== */
+    .poster {
+      background: radial-gradient(135% 75% at 50% 0%, #FFFCF4, var(--bg) 60%);
+      color: var(--ink);
+      padding: var(--pad);
+      font-family: var(--font-body);
+    }
+
+    /* —— 顶部角标：便利贴感 —— */
+    .bk-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 800;
+      font-size: 28px;
+      letter-spacing: 2px;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      transform: rotate(-2deg);
+      box-shadow: 6px 6px 0 var(--accent-soft);
+    }
+
+    /* —— 封面大字报标题 —— */
+    .bk-cover-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: var(--fs-cover-title);
+      line-height: 1.5;
+      letter-spacing: -1px;
+      margin-top: 48px;
+    }
+    .bk-cover-title .row { display: block; }
+    .bk-cover-title .hl {
+      color: var(--bg);
+      background: var(--accent);
+      padding: 6px 18px;
+      border-radius: 12px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .bk-cover-title .box {
+      border: var(--hairline) solid var(--ink);
+      padding: 4px 16px;
+      border-radius: 12px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .bk-cover-title .wave {
+      position: relative;
+      display: inline-block;
+    }
+    .bk-cover-title .wave::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 4px;
+      height: 14px;
+      background:
+        radial-gradient(circle at 12px 0, transparent 12px, var(--accent) 13px) 0 0 / 24px 14px repeat-x;
+      opacity: .85;
+    }
+
+    /* —— 手绘箭头 —— */
+    .bk-arrow {
+      position: absolute;
+      right: 64px;
+      top: 360px;
+      width: 140px;
+      transform: rotate(8deg);
+    }
+
+    /* —— 封面副述 —— */
+    .bk-sub {
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin-top: 52px;
+      max-width: 84%;
+    }
+
+    /* —— 内容页：编号要点卡 —— */
+    .bk-h1 {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: var(--fs-h1);
+      line-height: 1.15;
+      margin-top: 24px;
+    }
+    .bk-h1 .hl {
+      color: var(--accent);
+    }
+    .bk-list {
+      margin-top: 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .bk-item {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: var(--radius);
+      padding: 30px 32px;
+      box-shadow: 8px 8px 0 var(--accent-soft);
+    }
+    .bk-num {
+      flex: none;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bk-item-body { flex: 1; }
+    .bk-item-title {
+      font-weight: 800;
+      font-size: 40px;
+      line-height: 1.25;
+    }
+    .bk-item-desc {
+      font-size: var(--fs-body);
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+
+    /* —— 底栏 —— */
+    .bk-foot {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-top: 40px;
+    }
+    .bk-foot .dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .bk-foot .name {
+      font-weight: 800;
+      font-size: var(--fs-caption);
+      color: var(--ink);
+    }
+    .bk-foot .hint {
+      margin-left: auto;
+      font-size: var(--fs-caption);
+      color: var(--ink-soft);
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+
+    <!-- ===== 封面页 ===== -->
+    <section class="poster">
+      <span class="bk-tag">租房改造合集 ✦</span>
+
+      <h1 class="bk-cover-title">
+        <span class="row">租房 3 年</span>
+        <span class="row">这 <span class="hl">5 个好物</span></span>
+        <span class="row">让我家像花了</span>
+        <span class="row"><span class="box">5 万装的</span></span>
+      </h1>
+
+      <svg class="bk-arrow" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 18 C70 4 130 30 138 78" stroke="#F06A2E" stroke-width="7" stroke-linecap="round"/>
+        <path d="M138 78 L118 70 M138 78 L130 56" stroke="#F06A2E" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+
+      <p class="bk-sub">不动一砖一瓦，全是可拆可带走的，押金照样退满 👌</p>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@小户型改造日记</span>
+        <span class="hint">往下滑 看清单 →</span>
+      </div>
+    </section>
+
+    <!-- POSTERS_HERE: 复制 .poster 区块来增加页数 -->
+
+    <!-- ===== 内容页 ===== -->
+    <section class="poster">
+      <span class="bk-tag">5 件好物清单</span>
+
+      <h2 class="bk-h1">先说<span class="hl">最值</span>的 3 件<br>闭眼冲都不亏</h2>
+
+      <div class="bk-list">
+        <div class="bk-item">
+          <div class="bk-num">1</div>
+          <div class="bk-item-body">
+            <div class="bk-item-title">无主灯轨道射灯</div>
+            <div class="bk-item-desc">免布线、磁吸可挪位，瞬间告别"出租屋大白光"，氛围感拉满。</div>
+          </div>
+        </div>
+        <div class="bk-item">
+          <div class="bk-num">2</div>
+          <div class="bk-item-body">
+            <div class="bk-item-title">奶油色窗帘 + 静音轨道</div>
+            <div class="bk-item-desc">遮光率 90%，落地一铺整面墙质感直接翻倍，拆下来还能带走。</div>
+          </div>
+        </div>
+        <div class="bk-item">
+          <div class="bk-num">3</div>
+          <div class="bk-item-body">
+            <div class="bk-item-title">peel &amp; stick 自粘地板</div>
+            <div class="bk-item-desc">原木纹一铺,丑瓷砖全盖住,退租撕掉不留痕,押金一分不少。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@小户型改造日记</span>
+        <span class="hint">剩下 2 件在评论区 ↓</span>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

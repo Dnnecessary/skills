@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Generate a cover-specific coarse pixel SVG from a transparent IP source.
+
+The article cover is scaled down aggressively by WeChat on phones. This asset
+uses a deliberately small logical pixel grid and then enlarges it in SVG, so
+one logical pixel is not compressed below a device pixel before page scaling.
+
+Colour handling:
+  * The source can be a JPEG with a near-white background. Before it is reduced
+    to the cover grid, near-white pixels connected to the image edge are made
+    transparent so the finished SVG does not cover the animated cover scene.
+  * Automatic median-cut spends most palette entries on near-black brown
+    compression noise. A fixed role-based palette is used instead, modeled on
+    the cover IP.
+  * On the 62x116 cover grid the eyewear is rebuilt as geometry (two separate
+    frames, a thin bridge, sclera and rounded pupils). Sampling the reduced
+    artwork alone merges the thin golden rims with skin and dark pupils into
+    one orange band across the middle of the face, so the viewer can no longer
+    read two glasses. The 160x298 asset keeps the sampled source detail.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import defaultdict
+from pathlib import Path
+
+from PIL import Image
+
+
+COVER_PALETTE = (
+    "#05070B", "#111827", "#1D202B", "#2B3038", "#413B3D", "#5B4640",
+    "#76574A", "#9B6B57", "#B75F46", "#CF493D", "#E5484D", "#F27C65",
+    "#C47956", "#DE8C69", "#F0A986", "#F9B690", "#FECFAB", "#F3D9C0",
+    "#F8BD48", "#D99A26", "#FFF2C0", "#DFDEDD", "#F8FAF9", "#FFFFFF",
+    "#4E566E", "#6A5E62", "#9CA3AF",
+)
+
+GLASSES_YELLOW = "#FACC15"
+GLASSES_DARK = "#05070B"
+
+# Eyewear geometry on the 62x116 cover grid. Nearest-neighbour reduction of
+# the reference artwork merges the thin golden rims, the skin and the dark
+# pupils into one orange band across the middle of the face. The viewer then
+# reads a single blob instead of two glasses. On this coarse grid the frames
+# are therefore rebuilt as geometry; the 160x298 asset keeps the source detail.
+COVER_GLASSES_BOXES = ((18, 37, 28, 45), (30, 37, 40, 45))
+COVER_GLASSES_BRIDGE = (28, 39, 30, 40)
+COVER_GLASSES_TEMPLES = ((16, 38, 18, 39), (40, 38, 42, 39))
+
+
+def _rgb(value: str) -> tuple[int, int, int]:
+    return tuple(bytes.fromhex(value[1:]))  # type: ignore[return-value]
+
+
+def apply_cover_glasses(grid: dict[tuple[int, int], tuple[int, int, int]]) -> None:
+    """Draw two separate lens frames, pupils and a thin bridge at 62x116."""
+    yellow = _rgb("#FACC15")
+    gold_shadow = _rgb("#D99A26")
+    white = _rgb("#F8FAF9")
+    pupil = _rgb("#413B3D")
+
+    for x0, y0, x1, y1 in COVER_GLASSES_BOXES:
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                grid[(x, y)] = white
+        # Rounded rim: two pixels are shaved off each corner.
+        for x in range(x0 + 2, x1 - 2):
+            grid[(x, y0)] = yellow
+            grid[(x, y1 - 1)] = gold_shadow
+        for y in range(y0 + 2, y1 - 2):
+            grid[(x0, y)] = yellow
+            grid[(x1 - 1, y)] = yellow
+        for x, y in (
+            (x0 + 1, y0), (x1 - 2, y0), (x0, y0 + 1), (x1 - 1, y0 + 1),
+            (x0 + 1, y1 - 1), (x1 - 2, y1 - 1), (x0, y1 - 2), (x1 - 1, y1 - 2),
+        ):
+            grid[(x, y)] = gold_shadow
+        # Round pupil with sclera above and below, plus a small catchlight.
+        rows = (
+            (y0 + 2, x0 + 3, x1 - 4),
+            (y0 + 3, x0 + 2, x1 - 3),
+            (y0 + 4, x0 + 2, x1 - 3),
+            (y0 + 5, x0 + 3, x1 - 4),
+        )
+        for y, xa, xb in rows:
+            for x in range(xa, xb):
+                grid[(x, y)] = pupil
+        grid[(x0 + 3, y0 + 2)] = white
+        grid[(x0 + 4, y0 + 2)] = white
+
+    # Thin dark-gold bridge; dim the two inner rim pixels it joins so the
+    # centre never reads as a solid yellow block.
+    bx0, by0, bx1, by1 = COVER_GLASSES_BRIDGE
+    for y in range(by0, by1):
+        for x in range(bx0, bx1):
+            grid[(x, y)] = gold_shadow
+    for x in (bx0 - 1, bx1):
+        grid[(x, by0)] = gold_shadow
+    for xa, ya, xb, yb in COVER_GLASSES_TEMPLES:
+        for y in range(ya, yb):
+            for x in range(xa, xb):
+                grid[(x, y)] = yellow
+
+
+def squared_distance(a: tuple[int, int, int], b: tuple[int, int, int]) -> int:
+    return sum((x - y) ** 2 for x, y in zip(a, b))
+
+
+def parse_palette() -> tuple[tuple[int, int, int], ...]:
+    return tuple(tuple(bytes.fromhex(color[1:])) for color in COVER_PALETTE)
+
+
+def remove_edge_connected_near_white(image: Image.Image) -> Image.Image:
+    """Make only the near-white background transparent.
+
+    White garment details remain intact because only pixels reachable from the
+    image edge are removed. JPEG noise is included with a conservative
+    near-white threshold so the source can remain a normal reference photo.
+    """
+    rgba = image.convert("RGBA")
+    pixels = rgba.load()
+    width, height = rgba.size
+    transparent: set[tuple[int, int]] = set()
+    queue: list[tuple[int, int]] = []
+
+    def is_background(x: int, y: int) -> bool:
+        r, g, b, a = pixels[x, y]
+        return a >= 16 and min(r, g, b) >= 225 and max(r, g, b) - min(r, g, b) <= 22
+
+    for x in range(width):
+        for y in (0, height - 1):
+            if is_background(x, y):
+                queue.append((x, y))
+    for y in range(height):
+        for x in (0, width - 1):
+            if is_background(x, y):
+                queue.append((x, y))
+
+    while queue:
+        x, y = queue.pop()
+        if (x, y) in transparent or not is_background(x, y):
+            continue
+        transparent.add((x, y))
+        for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+            if 0 <= nx < width and 0 <= ny < height:
+                queue.append((nx, ny))
+
+    for x, y in transparent:
+        r, g, b, _ = pixels[x, y]
+        pixels[x, y] = (r, g, b, 0)
+    return rgba
+
+
+def crop_visible(image: Image.Image) -> Image.Image:
+    alpha = image.getchannel("A")
+    bbox = alpha.getbbox()
+    if bbox is None:
+        raise ValueError("IP source has no visible pixels after background removal")
+    return image.crop(bbox)
+
+
+def contain_on_canvas(image: Image.Image, width: int, height: int) -> Image.Image:
+    """Scale the visible character into the target grid without distortion."""
+    ratio = min(width / image.width, height / image.height)
+    target = (max(1, round(image.width * ratio)), max(1, round(image.height * ratio)))
+    reduced = image.resize(target, Image.Resampling.NEAREST)
+    canvas = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    canvas.alpha_composite(reduced, ((width - target[0]) // 2, height - target[1]))
+    return canvas
+
+
+def build_svg(source: Path, output: Path, width: int, height: int) -> None:
+    image = contain_on_canvas(crop_visible(remove_edge_connected_near_white(Image.open(source))), width, height)
+    entries = parse_palette()
+
+    # 1. Map every visible pixel to the fixed role palette.
+    grid: dict[tuple[int, int], tuple[int, int, int]] = {}
+    for y in range(height):
+        for x in range(width):
+            r, g, b, a = image.getpixel((x, y))
+            if a >= 128:
+                grid[(x, y)] = min(entries, key=lambda e: squared_distance((r, g, b), e))
+
+    # 2. Rebuild the eyewear on the coarse cover grid (see apply_cover_glasses).
+    if (width, height) == (62, 116):
+        apply_cover_glasses(grid)
+
+    # 3. Merge horizontal runs by colour into compact path commands.
+    rows_by_color: dict[tuple[int, int, int], list[tuple[int, int, int]]] = defaultdict(list)
+    for y in range(height):
+        run_color: tuple[int, int, int] | None = None
+        run_start = 0
+        for x in range(width + 1):
+            color = grid.get((x, y)) if x < width else None
+            if color != run_color:
+                if run_color is not None:
+                    rows_by_color[run_color].append((run_start, y, x - run_start))
+                run_color = color
+                run_start = x
+
+    path_parts = []
+    for color in sorted(rows_by_color, key=lambda c: (sum(c), c)):
+        commands = "".join(f"M{x} {y}h{length}v1h-{length}z" for x, y, length in rows_by_color[color])
+        path_parts.append(f'<path d="{commands}" fill="#{color[0]:02X}{color[1]:02X}{color[2]:02X}"/>')
+
+    svg = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" role="img" aria-label="毕业女孩封面专用粗像素 IP（黄色眼镜框）" '
+        f'shape-rendering="crispEdges">' + "".join(path_parts) + "</svg>\n"
+    )
+    output.write_text(svg)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("source", type=Path)
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--width", type=int, default=62)
+    parser.add_argument("--height", type=int, default=116)
+    args = parser.parse_args()
+    build_svg(args.source, args.output, args.width, args.height)
+
+
+if __name__ == "__main__":
+    main()

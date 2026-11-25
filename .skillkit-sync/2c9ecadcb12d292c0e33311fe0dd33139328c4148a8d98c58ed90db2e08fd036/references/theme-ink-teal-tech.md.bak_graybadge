@@ -1,0 +1,751 @@
+# 主题组件库：墨青测评风（ink-teal-tech）
+> **来源**：从真实 1:1 成品 HTML 逐块倒推 + 反推生成机制而来。固定样式骨架 + 可变参数槽（`{{…}}`）+ **AI 现场生成的 SVG 动画**。
+> **核心视觉**：墨黑 `#111827` + 青绿 `#0DA77D` 点睛；677px 居中；无阴影无渐变；胶囊标签 + 细线框 + 等宽字体标签。
+
+> ## ⚠️ 本主题的灵魂：按词现场生成 SVG 动画（最重要，务必先读）
+>
+> 这套排版**不是**静态组件拼装。它最鲜明的效果——封面场景动效、正文里"砍一刀"跳出斧子、"摔出来"人翻滚、"价格往下"字往下掉——全部是**排版时由 AI 根据当前文章的具体词句现场画出来的 SVG 动画**，不是预设词库、不是固定素材。
+>
+> **为什么必须现场生成**：作者文章很多，每篇的动词、场景都不同，不可能把每个词的动画提前内置。正确机制是——读到有画面感的词/句子，就为它单独构思并生成一段 SVG SMIL 动画，插在对应位置。
+>
+> **排版本主题时必须执行两步动画生成**（详见第三章）：
+> 1. **封面**：根据文章标题/主题，现场创作一幅场景化 SVG 动画（8 秒循环），绝不可降级成静态色块标题。
+> 2. **正文动词**：扫描全文，为每个有画面感的动词/短语，在该词位置生成一段 46×22 内联 SVG 动画（详见 3.2）。
+>
+> 违反这两步 = 排出来是"空壳"，不是墨青测评风。
+
+> ## ★ 1:1 母版保真校准（2026-11-16 二次纠错，最高优先级）
+>
+> 按 1:1 母版 HTML 逐项复核后，以下规格**覆盖**正文通用规则（尤其"正文首行缩进 2em"的默认做法）：
+>
+> 1. **全局容器必须照抄母版**（西文字体在前是母版事实，不为 9d 规则擅自改成 CJK 在前）：
+>    `max-width: 677px;margin: 0px auto;background: #FFFFFF;font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;color: #374151;line-height: 1.75;letter-spacing: 0.5px;`
+> 2. **正文段落不加 `text-indent`、不局部覆盖 `color`**：
+>    `margin: 0px 0px 16px;font-size: 14px;line-height: 1.9;text-align: justify;`
+>    母版正文是顶格排版，不是中文默认的 2em 缩进；加缩进会一眼看出不是 1:1。
+>    **⚠️ 底边距是 16px 不是 20px**（5 篇真实文章统计：`0px 0px 16px` 出现 133 次，`0px 0px 20px` 为 0 次）。
+> 3. **章节胶囊后的条目标题字号是 15px**，不是 16px。
+> 4. **封面必须采用“固定 IP + 中间作者介绍态/场景态”结构**：左侧必须使用用户提供并确认的像素 IP 图层，全程保留、不参与场景态淡入淡出；可仅保留约 `2.2s` 的轻微上下浮动与微倾斜。中间区域先用 **16×16 点阵 `<path>`**（不能用 `<text>`，生成法见 3.1b）显示用户确认的介绍语“不做岸上的看客，只做深海里的求索者”（逗号前蓝灰 `#8291A5`，逗号后青绿 `#0DA77D`），随后**只在这块中间区域**切换为文章场景动画，最后复位为介绍语。动画场景不得覆盖左侧 IP。
+> 5. 封面 SVG 必须带 `preserveAspectRatio="xMidYMid meet"`、`max-width:1246px;background:transparent;`，否则与母版缩放行为不一致。
+>
+> 用户明确要求"按 1:1 母版"时，以本节为准；通用 skill 规则（如 9d、首行缩进）不得覆盖本节。
+
+> ## ★ 组件来源白名单（2026-11-17，最高优先级）
+>
+> **本主题是“母版复用型主题”，不是“语义适配型组件主题”。** 排版时不能先根据段落语义在通用库里挑一个看起来合适的引用块、金句卡、提示卡、表格或数据卡；只能使用已经在该作者母版成品中逐项确认过的结构。
+>
+> 1. **封闭集合**：本文件列出的组件只有在其“母版来源”被标注为已验证、且当前内容确实满足原始触发条件时才能使用。通用增量库的 3a–3e（左竖条、药丸标题、金句、提示旁注）对本主题默认禁用；它们不能因为“语义合适”而加入文章。
+> 2. **没有组件就用正文**：Markdown 的普通引用、金句、补充解释、单句结论、列表项或段落，若母版没有同类结构，一律回落为 2.1 正文段落及其已验证的行内强调；**不生成引用块、卡片、边框容器或新标签**。
+> 3. **媒体不准伪造**：窗口式配图卡只装真实的产品 UI、过程截图或结果截图；没有用户提供的真实图片时，不创建“演示数据图”“流程图”或带窗口栏的伪证据图来填版。
+> 4. **标签来自原文结构，不来自内容猜测**：`STEP`、`01/02/03`、`REC/GIF`、`/// END` 仅在文章存在与母版相同的线性步骤、同级对象、媒体状态或收束标记时使用；`CASE` 已由同作者 01–05 篇实证（17 处）且用户指定使用，按 2.3 的深色图标胶囊在「同级实测情境」时取用；`POINT` 是独立的纯文字胶囊（A3 三处，见 2.3b / C3），**无 SVG 图标**，不能套 CASE 骨架。`HEADS UP` 在母版 1 处，2026-11-19 经用户明确指定为所需组件，**恢复为 2.6 白名单条件组件**（原文确有风险/限制/避坑信息时启用，骨架取自主版参考页）；`BONUS` 在母版 1 处、`MORE` 在 A5 1 处、`PART` 在 A3 3 处，仍为文章专用，默认不作为新文章可选组件；仅原文确有相同结构时按 `ink-component-library.md` 的 C2/C4 骨架取用。**A6 新文章（2026-11-19 用户确认纳入）新增 2.10 `GALLERY` 横向图集、2.11 内容标题横向轨、2.12 `PROMPT` 滚动块、2.13 `STILL/GIF` 媒体标签、2.14 tab 式窗口卡头**，骨架见 C8–C12。
+> 5. **冲突优先级**：本节覆盖本文件中“按语义选标签/容器”的泛化表述，以及 SKILL.md 中“主题没有等价组件时使用通用库”的默认规则。对本主题，**宁可少组件，也不能凭空新增组件类型**。
+> 6. **2026-11-18 白名单增补（用户据作者实机截图指出遗漏）**：**2.8 圈注词**（绿色手绘椭圆圈住关键词）与 **2.9 三方块分隔符**（黑实心 / 白底黑描边 / 绿实心）已在同一作者成品里逐字节验证，正式纳入封闭白名单；两者都有固定结构与触发条件，仍不得按语义自由派生新容器。
+>    **`CASE` 胶囊的解禁依据（2026-11-19 用户指定）**：用户随后提供了同作者 `CASE 01` / `CASE 02` 实机截图并明确要求按这些组件排版，且 01–05 篇逐字节实证 17 处；因此 `CASE` 已纳入 2.3 的 CASE 变体，仅在同级实测情境且原文有对应结构时取用。`PART` 仍不解禁。
+>    **`HEADS UP` 提示块的解禁依据（2026-11-19 用户指定）**：用户明确指出它是所需组件，不再以「A1–A5 出现 0 次」为由降级；恢复为 2.6 白名单条件组件，骨架逐字取自母版参考页，触发限定为原文确有风险/限制/避坑信息。
+>    **C13 真题呈现块的创建依据（2026-11-20 用户指定）**：用户明确要求复用 `PROMPT` 骨架新建「真题呈现」组件，标签固定为「真题呈现」，标题为按联考/模考名称填写的内容槽位。已纳入 2.15 与默认白名单；这是用户指定创建的变体，不冒充原作逐字节提取。
+>    **A6 五件的解禁依据（2026-11-19 用户「纳入吧」确认）**：用户看过从同作者新文章逐字节提取的 C8–C12 展品页后确认全部纳入。五件进入 2.10–2.14 正文规则与默认白名单，其中 2.12 `PROMPT` 覆盖旧「代码/Prompt 一律回落正文」的泛化规则（成为唯一例外），2.11 标题按内容槽位填写、不得照抄原文实例。
+> 7. **SKILL.md 的组件调用流程整体不适用（2026-11-19 用户确认）**：本主题不是「在通用流程上打补丁」，而是**整套调用机制不同**。识别到本主题后，SKILL.md 以下规则一律不适用：第 2 步读两份组件库（本主题**不加载** `common-components.md`）、第 3 步 Markdown 元素 → 组件映射、第 4 步「文章类型 → 组件组合配方表」与按语义挑组件、「生成时的智能处理」1–8 条（自动编号 / 英文标签 / 引言高亮 / 目录 / 引言卡署名 / 尾部签名区 / 列表转换）、「视觉层级 3 层递进（所有主题通用）」、9d 首行缩进 2em、Gotchas 中基于通用库 1a/1b/3a–3e 的条目。仍适用的只有：平台红线、选主题、校验（须带 `--theme`）、输出格式。
+>    **替代判据**：先问「这个结构在不在封闭白名单里、原文有没有相同触发条件」，两者都成立才用；否则一律回落 **2.1 正文 + 4.3 已验证的行内强调**。**行内强调是白名单内组件**（见 2.1 / 4.3），不是额外装饰，必须逐段落实；白名单外容器一律禁用。两者性质不同，**不可互相抵消，也不存在「被纠正后不敢加样式」的尺度问题**。
+
+## 一、设计变量
+| 项 | 值 |
+|---|---|
+| 主色/墨黑 | `#111827`（胶囊、标题、金句底、图标） |
+| 点睛/青绿 | `#0DA77D`（关键数字、下划线、状态点、流程终点），全篇克制使用 |
+| 正文色 | `#4B5563`；次级 `#374151`；说明 `#9CA3AF`；细线 `#E5E7EB`/`#D1D5DB` |
+| 底色 | `#FFFFFF` 主底；`#F3F4F6` 窗口栏/卡片底 |
+| 正文 | 14px / 1.9 / 两端对齐 / `padding:0 12px`；**底边距 16px（非 20px）**；顶格不加 `text-indent`，继承全局 `#374151`；要点加 `color:#111827;font-weight:700` 深色加粗 |
+| 标签字体 | `Menlo,Consolas,'Courier New',monospace`（仅代码块/英文标签/数字，规则 9a 例外） |
+| 动效 | SVG SMIL（`<animate>`/`<animateTransform>`），微信内保留，勿删 |
+
+## 二、已验证母版组件库（封闭白名单）
+下面是从作者成品母版逐项提取的**已验证组件**。`<span leaf="">` 内的 `{{…}}` 是可替换参数，其余样式/结构固定；它们不是可按语义任意扩展的通用装饰库。正文优先于新容器。
+
+### 2.1 正文段落（含行内强调）
+
+普通叙述段。**行内强调是 2.1 本身的组成部分，不是额外加的组件**：每个普通段落都必须从 4.3 封闭白名单里挑 1–2 个短语包起来，叙述型长段落不得 0 强调。下面这段骨架可直接复制，不要再用「整段文字」占位符：
+
+```html
+<section style="padding: 0px 12px;"><p style="margin: 0px 0px 16px;font-size: 14px;line-height: 1.9;text-align: justify;"><span leaf="">{{段落前半}}</span><span style="color:#111827;font-weight:700;"><span leaf="">{{关键数据/产品名}}</span></span><span leaf="">{{段落后半}}</span><span style="color:#111827;font-weight:600;border-bottom:1px solid #111827;padding-bottom:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone;"><span leaf="">{{一句话判断}}</span></span><span leaf="">{{段落收尾}}</span></p></section>
+```
+
+- 强调只许照抄 4.3 的 E1–E7 骨架，**不得改色值、字重、组合或自造样式**；
+- 强调落在完整语义单元边界，不拆词；同一个词不得叠加两种强调，也不得同时做 3.2 词内动画；
+- 整段是代码 / Prompt、图注、纯清单或确无要点的过渡句时可豁免，见 4.3 密度门禁。
+
+### 2.2 线性步骤块
+
+仅用于原文存在至少两步、步骤不可调换的操作/教程流程；不能拿来给章节、并列观点或材料切口编号。这里有两种已经取证的原作外观，先由原文结构决定，不能只凭视觉喜好切换。
+
+**A. `STEP n/m` 进度头（RunningHub 原作）**：原文是连续教程，步骤总数明确（如 4 步），每一步都推进同一工作流时使用。结构是灰色 `STEP` + 深色当前序号 + 灰色 `/总数` + 1px 竖线 + 步骤标题；截图中的 `STEP 2/4 | AI 优化提示词` 属于这一类。`n/m` 必须来自原文，不能为普通段落补造总步骤数。
+
+> **标题层级取证（2026-11-19）**：A4 原作 `/tmp/wx_decoded_4.html` 中，`AI 优化提示词` 的源码是 `<p style="font-size:15px;font-weight:800;color:rgb(17,24,39);line-height:1.6;">`，紧接在 `STEP 2/4` 后；「出剧本 / 打开云片场 / 正式生成」也同为 15px/800。六份原作均无 `<h1>`–`<h6>` 标签。因此它**不是** Markdown 的 `#` 或 `##`，而是 STEP 组件内部的步骤名（视觉上最多按 `###` 级小标题理解）。判据仍是「线性步骤 + 原文 n/m」，不是标题符号；源稿若写成 `#` 应按文章主标题走封面，写成 `##` 也不能单独触发 STEP。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin: 30px 0px 12px;"><section style="display:flex;align-items:baseline;"><section style="display:flex;align-items:baseline;flex-shrink:0;"><p style="margin:0 4px 0 0;font-size:11px;font-weight:700;color:#9CA3AF;line-height:1;letter-spacing:1px;white-space:nowrap;"><span leaf="">STEP</span></p><p style="margin:0;font-family:&quot;Avenir Next&quot;,&quot;Helvetica Neue&quot;,Roboto,Arial,sans-serif;line-height:1;font-size:17px;font-weight:800;color:#111827;"><span leaf="">{{当前步骤}}</span></p><p style="margin:0 0 0 1px;font-family:&quot;Avenir Next&quot;,&quot;Helvetica Neue&quot;,Roboto,Arial,sans-serif;line-height:1;font-size:10px;font-weight:600;color:#D1D5DB;"><span leaf="">/{{总步骤}}</span></p><section style="width:1px;height:12px;background:#D1D5DB;margin-left:9px;line-height:0;font-size:0;align-self:center;"><span leaf=""><br /></span></section></section><p style="margin:0 0 0 16px;font-size:15px;font-weight:800;color:#111827;line-height:1.6;letter-spacing:.5px;"><span leaf="">{{步骤标题}}</span></p></section></section><p style="margin:0 0 16px;font-size:14px;line-height:1.9;text-align:justify;"><span leaf="">{{步骤正文}}</span></p></section>
+```
+
+**B. 中文步骤胶囊**：仅当源文自身就是“第一步/第二步”等中文步骤标签，且仍满足不可调换、至少两步时使用。不能把并列材料套成“第一步”。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin-bottom: 24px;"><section style="display: flex;align-items: center;gap: 8px;margin-bottom: 10px;"><span style="display: inline-block;background: #111827;color: #FFFFFF;font-family: Menlo, Consolas, &quot;Courier New&quot;, monospace;font-size: 10px;font-weight: 700;padding: 2px 8px;border-radius: 12px;letter-spacing: 1px;flex-shrink: 0;"><span leaf="">{{步骤序号，如 第一步}}</span></span><p style="margin: 0px;font-size: 15px;font-weight: 800;color: #111827;line-height: 1.6;"><span leaf="">{{步骤标题}}</span></p></section><p style="margin: 0px;font-size: 14px;color: #4B5563;line-height: 1.9;text-align: justify;"><span leaf="">{{步骤正文段落}}</span></p></section></section>
+```
+
+### 2.3 胶囊序号标题
+
+盘点类条目标题（第一款/第二款…）。**注意：本组件是"深色图标胶囊"（CASE/BONUS/裸编号），骨架 C2 见 `references/ink-component-library.md`。POINT 是另一种"纯文字胶囊"（无 SVG），骨架 C3，见下方 2.3b，切勿给 POINT 补图标。**
+
+```html
+<section style="padding: 0px 12px;"><section style="margin: 30px 0px 12px;"><section style="display: flex;align-items: flex-start;"><section style="flex-shrink: 0;margin-top: 2px;line-height: 0;"><section style="display: flex;align-items: center;background: #111827;padding: 3px 9px 3px 8px;border-radius: 12px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" style="display:block;flex-shrink:0;overflow:visible;"><g><animate attributename="opacity" values="1;1;0;0;1;1" keytimes="0;0.2;0.36;0.86;0.96;1" calcmode="spline" keysplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="2.4s" repeatcount="indefinite"></animate><g><animatetransform attributename="transform" type="translate" values="0 0;0 0;0 2.6;0 2.6;0 0;0 0" keytimes="0;0.2;0.36;0.86;0.87;1" calcmode="spline" keysplines="0.45 0 0.55 1;0.55 0 0.85 0.45;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="2.4s" repeatcount="indefinite"></animatetransform><circle cx="2.4" cy="2.5" r="1.5" fill="#FACC15"></circle></g></g><g opacity="0"><animate attributename="opacity" values="0;0;1;1;0;0" keytimes="0;0.34;0.46;0.84;0.92;1" calcmode="spline" keysplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="2.4s" repeatcount="indefinite"></animate><g><animatetransform attributename="transform" type="translate" values="0 2;0 2;0 0;0 0" keytimes="0;0.34;0.48;1" calcmode="spline" keysplines="0.45 0 0.55 1;0.23 1 0.32 1;0.45 0 0.55 1" dur="2.4s" repeatcount="indefinite"></animatetransform><path d="M12.6 1.2A1.9 1.9 0 1 0 13.3 4.2A1.5 1.5 0 0 1 12.6 1.2Z" fill="#E0E7FF"></path></g></g><path d="M.6 6.6Q4.4 5.9 7 2.5Q9.6 5.9 13.4 6.6L12.4 7.5H1.6Z" fill="#CBD5E1"></path><path d="M7 1.6V2.8" stroke="#CBD5E1" stroke-width=".9" stroke-linecap="round"></path><path d="M3.4 6.3Q5.6 5.4 7 3.6" fill="none" stroke="#FFFFFF" stroke-opacity=".7" stroke-width=".45" stroke-linecap="round"></path><rect x="3.2" y="7.5" width="7.6" height="4.7" fill="#F3F4F6"></rect><rect x="3.2" y="7.5" width="1" height="4.7" fill="#F87171"></rect><rect x="9.8" y="7.5" width="1" height="4.7" fill="#F87171"></rect><path d="M6 12.2V9.6Q7 8.6 8 9.6V12.2Z" fill="#6B7280"></path><rect x="1.8" y="12.2" width="10.4" height="1" rx=".3" fill="#9CA3AF"></rect><g transform="translate(11.9 8.9)"><g><animatetransform attributename="transform" type="scale" values="0;0;1.25;1;1;0;0" keytimes="0;0.42;0.52;0.6;0.84;0.92;1" calcmode="spline" keysplines="0.45 0 0.55 1;0.23 1 0.32 1;0.23 1 0.32 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="2.4s" repeatcount="indefinite"></animatetransform><g transform="translate(-11.9 -8.9)"><circle cx="11.9" cy="8.9" r="2.3" fill="#FDE68A" fill-opacity=".45"></circle></g></g></g><path d="M11.9 7.3V7.9" stroke="#CBD5E1" stroke-width=".4"></path><ellipse cx="11.9" cy="8.9" rx=".95" ry="1.1" fill="#DC2626"></ellipse><g opacity="0"><animate attributename="opacity" values="0;0;1;1;0;0" keytimes="0;0.42;0.5;0.84;0.92;1" calcmode="spline" keysplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="2.4s" repeatcount="indefinite"></animate><ellipse cx="11.9" cy="8.9" rx=".95" ry="1.1" fill="#F87171"></ellipse><ellipse cx="11.9" cy="8.9" rx=".4" ry=".6" fill="#FDE68A"></ellipse></g></svg><p style="margin: 0px 0px 0px 5px;font-size: 10px;font-weight: 700;line-height: 1;white-space: nowrap;color: #FFFFFF;letter-spacing: 0.5px;"><span leaf="">{{序号，如 第一款/第二款}}</span></p></section></section><p style="margin: 0px 0px 0px 9px;font-size: 15px;font-weight: 800;color: #111827;line-height: 1.6;letter-spacing: 0.5px;flex: 1 1 0%;min-width: 0px;"><span leaf="">{{条目标题}}</span></p></section></section></section>
+```
+
+**深色图标胶囊的三类互斥调用（2026-11-19 六份原作逐字节复核）**：胶囊内 14×14 动效图标必须逐字节取自同作者成品（`/Users/Petrichr/WorkBuddy/2026-11-17-06-44-58/微信文章/` 下 01–05 篇），不得自绘或改 SMIL 属性大小写。外层保持原作几何：`display:flex;align-items:flex-start`，但**胶囊自身的外包裹必须 `margin-top:2px`，其内部图标行 `display:flex;align-items:center`；不得把图标单独顶到胶囊上沿**。图标在墨黑胶囊内垂直居中，胶囊相对右侧标题顶部有轻微 2px 下沉。
+
+- **`CASE 01/02/03`**：同篇有 ≥2 个可比较实测情境（输入/操作 → 观察/结果），且原文已有案例结构；标题写情境名。如「跨群对齐选品」。
+- **`BONUS`**：正文主体讲完后补充的彩蛋块（母版实证 "BONUS 顺手又做了两个计算机课的实验台"）。原文确有追加彩蛋时用。
+- **裸 `01/02/03`**：原文存在同级章节，但不需要把英文语义加回去时使用；标题是章节名，正文承接该章节叙述。如「从湖心亭的风雅，到废墟中的担当」。
+- **`STEP n/m` 不属于本组件**：它在 2.2 / 骨架 C5，专供不可调换的线性流程，不能用作章节或并列要点。
+
+### 2.3b 纯文字胶囊 POINT n（A3 三处实证，骨架 C3）
+
+**POINT 与 CASE 是两种不同组件**。POINT 是纯文字 Menlo 胶囊，**无 SVG 图标**，外层 `align-items:center;gap:8px`，整体是"胶囊 + 标题 + 正文"紧凑块。触发：并列、可各自成立的观点/能力/材料切口，不表先后。**禁止给 POINT 补 SVG 图标**（此前错误已纠正）。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin-bottom: 24px;"><section style="display: flex;align-items: center;gap: 8px;margin-bottom: 10px;"><span style="display: inline-block;background: rgb(17, 24, 39);color: rgb(255, 255, 255);font-family: Menlo, Consolas, &quot;Courier New&quot;, monospace;font-size: 10px;font-weight: 700;padding: 2px 8px;border-radius: 12px;letter-spacing: 1px;flex-shrink: 0;"><span leaf="">POINT 01</span></span><p style="margin: 0px;font-size: 15px;font-weight: 800;color: rgb(17, 24, 39);line-height: 1.6;"><span leaf="">{{要点标题}}</span></p></section><p style="margin: 0px;font-size: 14px;color: rgb(75, 85, 99);line-height: 1.9;text-align: justify;"><span leaf="">{{要点正文}}</span></p></section></section>
+```
+
+### 2.4 配图卡（窗口式）
+
+带浏览器窗口栏的配图：三圆点 + 文件名 + 图片。最常用配图组件。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin: 16px 0px 22px;"><section style="border: 1px solid #E5E7EB;border-radius: 8px;overflow: hidden;"><section style="display: flex;align-items: center;padding: 8px 10px;background: #F3F4F6;border-bottom: 1px solid #E5E7EB;"><section style="line-height: 0;flex-shrink: 0;"><span style="display: inline-block;width: 8px;height: 8px;border-radius: 50%;background: #111827;margin-right: 5px;line-height: 0;font-size: 0px;"><span leaf=""><br  /></span></span><span style="display: inline-block;width: 8px;height: 8px;border-radius: 50%;background: #D1D5DB;margin-right: 5px;line-height: 0;font-size: 0px;"><span leaf=""><br  /></span></span><span style="display: inline-block;width: 8px;height: 8px;border-radius: 50%;background: #D1D5DB;margin-right: 5px;line-height: 0;font-size: 0px;"><span leaf=""><br  /></span></span></section><section style="flex: 1 1 0%;min-width: 0px;margin-left: 8px;background: #FFFFFF;border-radius: 4px;padding: 3px 8px;"><p style="margin: 0px;font-family: Menlo, &quot;SF Mono&quot;, Consolas, &quot;Courier New&quot;, monospace;font-size: 10px;color: #9CA3AF;line-height: 1.3;"><span leaf="">{{窗口文件名/图注}}</span></p></section></section><section style="line-height: 0;"><span leaf=""><img data-src="{{图片URL}}" data-ratio="0.746875" data-type="webp" data-w="1280" style="display: block;width: 100%;height: auto;margin: 0px;padding: 0px;" data-width="2470" data-height="1846" data-imgfileid="100008215" data-aistatus="1"  /></span></section></section></section></section>
+```
+
+### 2.5 纯图片块
+
+无窗口栏的直接配图。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin: 16px 0px 22px;"><section style="border: 1px solid #E5E7EB;line-height: 0;"><span leaf=""><img src="{{图片URL}}" data-ratio="0.75" data-type="png" data-w="1600" style="display: block;width: 100%;height: auto;margin: 0px;padding: 0px;" data-width="1600" data-height="1200" data-imgfileid="100008219" data-aistatus="1"  /></span></section></section></section>
+```
+
+### 2.5b 图片说明文字（5 篇实证：出现 225 次，最高频组件之一）
+
+配图下方的小字说明，12px 左对齐，`overflow-wrap:anywhere` 防长 URL 溢出。
+
+```html
+<section style="padding: 0px 12px;"><p style="margin: 0px 0px 8px;font-size: 12px;color: #374151;line-height: 1.9;text-align: left;overflow-wrap: anywhere;"><span leaf="">{{图片说明文字}}</span></p></section>
+```
+
+> 常见用法：紧跟在配图卡（2.4 或 2.5）后面，用一句话点出图里看了什么。也有放在图卡前的导引说明。
+
+### 2.6 HEADS UP 提示块（白名单 · 条件启用）
+
+> 2026-11-19 用户明确指定 HEADS UP 为所需组件，**恢复为白名单条件组件**；骨架逐字取自母版参考页。此前「A1–A5 出现 0 次」只说明它低频，不构成禁用理由。
+> **触发条件**：原文确有明确的风险、限制、前提、合规要求或避坑信息时启用；一般提醒、注意事项先写为普通正文，不因为「语义像提醒」就自动套用，也不为丰富版式硬塞。全文按实际提示点数量使用，不强行凑数。
+
+提醒/注意：摇动图标 + 主题词 + 英文标签 + 提示正文（骨架见下方 HTML，逐字照抄）。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin: 28px 0px 24px;"><section style="display: flex;align-items: flex-start;"><section style="flex-shrink: 0;margin: 0px 10px 0px 0px;line-height: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32" style="display:block;flex-shrink:0;"><g transform="translate(11 26)"><g><animatetransform attributename="transform" type="rotate" values="0;16;-3;0;13;-2;0;0" keytimes="0;0.06;0.12;0.16;0.22;0.28;0.32;1" calcmode="spline" keysplines="0.16 1 0.3 1;0.45 0 0.55 1;0.45 0 0.55 1;0.16 1 0.3 1;0.45 0 0.55 1;0.45 0 0.55 1;0 0 1 1" dur="4.6s" repeatcount="indefinite"></animatetransform><g transform="translate(-11 -26)"><path d="M8.3 3.5h5.4l-1.4 17.5h-2.6z" fill="#111827" stroke="#111827" stroke-width="1" stroke-linejoin="round"></path></g></g></g><circle cx="11" cy="26" r="2.5" fill="#0DA77D"></circle></svg></section><section style="flex: 1 1 0%;min-width: 0px;"><section style="display: flex;align-items: center;"><p style="margin: 0px;font-size: 14px;font-weight: 900;color: #111827;line-height: 1.6;letter-spacing: 1px;flex-shrink: 0;"><span leaf="">{{主题词，如 子智能体}}</span></p><section style="flex: 1 1 0%;height: 0px;border-bottom: 1px dotted #D1D5DB;margin: 0px 8px;align-self: center;line-height: 0;font-size: 0px;"><span leaf="">HEADS UP</span></section><p style="margin: 0px;font-family: Menlo, &quot;SF Mono&quot;, Consolas, &quot;Courier New&quot;, monospace;font-size: 8px;color: #9CA3AF;letter-spacing: 2px;line-height: 1;flex-shrink: 0;"><span leaf="">{{提示语1}}</span></p></section><p style="margin: 3px 0px 0px;font-size: 13px;color: #374151;line-height: 1.85;text-align: left;"><span leaf="">{{提示正文段}}</span></p><p style="margin: 6px 0px 0px;font-size: 13px;color: #374151;line-height: 1.85;text-align: left;"><span leaf="">{{提示正文段2（可选，无则删此 p）}}</span></p></section></section></section></section>
+```
+
+### 2.7 结尾符 /// END
+
+文章收尾分割标记。**5 篇实证标准形式**：斜体 `/// END` + 灰色细线 + 黄色小条(8×3) + 绿色小点(4×4)，不用 SVG 笔尖。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin: 0px;"><section style="display: flex;align-items: center;gap: 8px;"><span style="font-family: Georgia, &quot;Times New Roman&quot;, serif;font-size: 11px;font-style: italic;color: #9CA3AF;letter-spacing: 2px;"><span leaf="">/// END</span></span><section style="display: flex;align-items: center;gap: 6px;flex: 1 1 0%;min-width: 0px;"><span style="flex: 1 1 0%;height: 1px;background: #E5E7EB;line-height: 0;font-size: 0px;"><span leaf=""><br  /></span></span><span style="display: inline-block;width: 8px;height: 3px;background: #F2CF5B;line-height: 0;font-size: 0px;"><span leaf=""><br  /></span></span><span style="display: inline-block;width: 4px;height: 4px;background: #047857;line-height: 0;font-size: 0px;"><span leaf=""><br  /></span></span></section></section></section></section>
+```
+
+> **变体**：部分文章在灰线后接一个 112×34 的 SVG 插画（笔/角色），但上述简单形式是 5 篇中出现最多的标准形式。
+
+
+### 2.8 圈注词（静态手绘椭圆，2026-11-18 新增·已验证）
+
+**母版来源**：作者 `03_千问办公2.0实测：能和团队协作的Team Agent来了.html` 正文「…把筹备事项、预算和当天跑单排成了一个[网页工作台]」。逐字节原件：
+`assets/theme-assets/ink-teal-tech/component-circled-word-author.svg`。
+
+**这是什么**：把一个 2–6 字关键词用**一圈深青绿手绘椭圆**圈出来，像人用笔圈重点。它是**独立静态组件**，不是词内动画：SVG 内 `animate` 数量为 0，不放进「字 ↔ 场景」交叉层，不参与 3.8s 循环。
+
+**触发条件**：原文确实出现「重点 / 就是这里 / 注意这个 / 就是它」这类需要圈出的强调词；全文 **≤3 处**。普通加粗、数据强调、下划线一律不用圈；不得为了凑组件把普通名词圈起来。
+
+**结构（其余样式固定，`{{字形层}}` 由 `glyph_to_path.py --no-opacity` 生成）**：
+```html
+<svg xmlns="http://www.w3.org/2000/svg" width="{{词宽}}" height="22" viewBox="0 0 {{词宽}} 22" role="img" aria-label="圈注：{{词}}" style="display:inline-block;vertical-align:-5.7px;overflow:visible;transform:scale(1);margin:0 7px;">{{字形层 path，fill="#111827"}}<path d="{{手绘椭圆 path}}" fill="none" stroke="#047857" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+```
+
+**手绘椭圆 path（母版原样，参考词宽 74；任意词按 x 方向等比缩放、y 保持 22）**：
+```
+M0.3 7.7Q1.3 5.1 4.0 4.0Q6.8 2.8 11.2 2.1Q15.6 1.4 20.4 0.8Q25.1 0.3 30.3 0.0Q35.6 -0.2 40.6 0.3Q45.6 0.8 49.7 1.5Q53.7 2.2 58.0 2.7Q62.2 3.2 66.5 3.9Q70.8 4.5 73.6 5.6Q76.5 6.6 78.5 7.8Q80.5 9.0 82.2 10.3Q84.0 11.6 83.2 12.9Q82.5 14.3 78.8 15.4Q75.1 16.4 71.1 17.2Q67.1 18.1 63.5 18.9Q59.9 19.7 55.5 20.3Q51.0 20.8 46.2 21.0Q41.4 21.2 36.3 21.5Q31.3 21.7 25.6 21.9Q19.9 22.0 14.9 21.4Q9.8 20.7 6.5 19.6Q3.2 18.5 0.6 17.3Q-2.1 16.2 -3.8 14.9Q-5.5 13.7 -4.9 12.4Q-4.4 11.1 -3.3 9.9Q-2.1 8.8 -1.9 7.5Q-1.6 6.2 -0.2 4.9L1.3 3.5
+```
+
+**硬规格**：
+- 描边 **`#047857`**、`1.3px`、圆头圆角、`fill="none"`；**不是 `#0DA77D`**，不是 CSS `border-radius:50%`，不是四段贝塞尔 `Z` 闭合的规整椭圆。末端 `L1.3 3.5` 是收笔尾迹，必须保留，不要闭合。
+- 字形用字体转 `<path>`，填充 **`#111827`**（比正文深一档），**不是**动画词的蓝灰 `#374151`；禁止 `<text>`。
+- 圈心对准字形中心，左右各外扩约 6px；母版 `margin:0 7px`，生成器因字形略宽用 `0 9px`，防止圈压到紧随其后的字或标点（用户对此敏感）。
+- **任意词生成器**：`scripts/generate_circled_word.py`，标准命令
+  `/Users/Petrichr/venv/bin/python scripts/generate_circled_word.py 就是这里 注意这个 --out /tmp/circled.html`
+  它复用 `glyph_to_path.py` 的字形层，只缩放母版圈 path 的 x 坐标（不缩放 y、不缩放描边），并自动把 `width/viewBox` 设为实际词宽。
+- **验收**：渲染后确认圈完整包住词、左右留白均匀、圈顶不压字顶、圈不穿过相邻汉字或标点；确认 SVG 内无 `<animate>`。
+- **换行门禁（2026-11-18 重排实测补充）**：圈注是 inline SVG，实际占位 = 词宽（`15px × 字数 + 2`）+ 左右各 `9px` margin，会明显撑长所在行。**禁止插在长段落接近行尾的位置**，否则紧随其后的 1–2 个汉字会被挤成跨行孤字（实测把「这个」拆成行末「这」+ 行首孤立的「个」，且下一行再接词内动画 SVG 时出现大片空白）。优先选短句、段落前半、左右都有余量且语义完整的位置；**677px 与固定 390px 容器两个宽度都要截图复核换行**。若出现孤字，只能换插入位置，**不得**靠缩小 SVG、改 `margin`、删字或改字号掩盖。同理，圈注词不要与已有词内动画 SVG 挤在同一个长句尾部。
+
+### 2.9 三方块分隔符（2026-11-18 新增·已验证）
+
+**母版来源**：作者 1:1 基准文章 `wechat-article_排版_墨青测评风(ink-teal-tech).html`，全文出现 3 次且结构完全一致。逐字节原件：
+`assets/theme-assets/ink-teal-tech/component-three-squares-divider.html`。
+
+**这是什么**：段落之间的轻量节奏分隔，`黑实心 → 白底黑描边空心 → 绿实心` 三个 6×6px 小方块，水平居中、上下各留 30px。不是装饰线、不是圆点、不是 `/// END`。
+
+**触发条件**：原文从一个话题转到另一个话题（如「讲完实验台」→「算总账」），需要一次呼吸式停顿；全文 **≤2 处**，不与 `/// END`、章节标题或配图卡相邻使用。没有真实语义转折时不要加。
+
+```html
+<section style="padding: 0px 12px;"><section style="margin: 30px 0px;"><section style="display: flex;align-items: center;justify-content: center;"><span style="display: inline-block;width: 6px;height: 6px;box-sizing: border-box;flex-shrink: 0;line-height: 0;font-size: 0px;background: #111827;"><span leaf=""><br  /></span></span><span style="display: inline-block;width: 6px;height: 6px;box-sizing: border-box;flex-shrink: 0;line-height: 0;font-size: 0px;border: 1px solid #111827;margin: 0px 10px;"><span leaf=""><br  /></span></span><span style="display: inline-block;width: 6px;height: 6px;box-sizing: border-box;flex-shrink: 0;line-height: 0;font-size: 0px;background: #0DA77D;"><span leaf=""><br  /></span></span></section></section></section>
+```
+
+**硬规格**：三个 `<span>` 一律 `6px×6px`、`display:inline-block`、`box-sizing:border-box`、`line-height:0`、`font-size:0px`；颜色依次 `#111827` 实心 / `border:1px solid #111827` 空心 / `#0DA77D` 实心；中间方块 `margin:0px 10px`；每个 span 内必须有 `<span leaf=""><br  /></span>`。外层 `padding:0 12px`、`margin:30px 0px`、`display:flex;align-items:center;justify-content:center`。**禁止**改成圆点、虚线、文字、加宽方块或加动画。
+
+
+### 2.10 GALLERY 横向滑动图集（A6 9 处，2026-11-19 纳入）
+
+**来源**：A6 同作者文章，9 处同构复用；此前 A4 横向镜头轨 / A5 横向图集记为文章专用，A6 将其固定为带 `GALLERY` 标签的标准组件。骨架见 `ink-component-library.md` C8。
+
+**结构**：黑底矩形标签 `GALLERY` + 右侧灰字 `← 左右滑动 →` + `overflow-x:scroll` 横滚容器；每帧 `width:80%`，帧内图片 + 底部页码 `n/m`。
+
+**触发**：同一对象的连续多页画面、并列前后对比，且「滑动」本身能说明问题时。禁止把无关图片凑成画廊；无此结构回落 2.4 / 2.5 逐张排列。
+
+### 2.11 内容标题横向轨（GALLERY 变体，A6 2 处，2026-11-19 纳入）
+
+**来源**：A6 两组（天文课 / NASA 模型）。骨架见 C9。
+
+**结构**：`GALLERY` 位置换成**内容驱动的黑底组名**（固定骨架不变：`overflow-x:scroll`、每帧 `width:78%`、`← 左右滑动 →`、`Georgia` 斜体 26px 浅灰序号 `01/02`、图片框、尾部 1px 留白帧）。
+
+**⚠️ 文字分两类，不可混淆**：
+- **内容槽位（必须随图片内容变化）**：黑底组名 =「<该组图片共同主题> · <段数> 段」（图片是语文课就写「语文课 · 2 段」，绝不照抄「天文课」）；每帧小标题 = 该帧图片内容概括，**且可选**——A6 的 NASA 组只有序号、没有任何帧小标题，不得因别组有就硬加。
+- **固定骨架**：其余样式与 `GALLERY` 标签文字（`GALLERY` 本身）不随内容变。
+
+**触发**：多段视频/演示图片按段并列、需要随内容变化的组名 + 序号时。
+
+### 2.12 PROMPT 上下滑动提示词块（A6 1 处，2026-11-19 纳入 · 覆盖旧回落规则）
+
+**来源**：A6 作者本人使用。骨架见 C10。
+
+**结构**：灰底圆角卡 `background:#F3F4F6;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden`；头部黑底 `PROMPT` 小标签（`border-radius:3px`）+ 13px/700 内容标题 + 灰字 `上下滑动 ↕`；内容区 `height:300px;overflow-y:scroll`，内含提示词正文、`border-top` 分隔的小标题、白底代码框（Menlo 11px）。
+
+**触发**：原文附有大段可复制的提示词/代码，且需要限定高度滚动展示时。**这是 2.1「代码 / Prompt 回落正文」的唯一例外**：仅当原文确有此结构时使用；否则仍回落 2.1 正文。标题是内容槽位，按实际提示词名称填写。
+
+### 2.13 STILL / GIF 成对媒体标签（A6 1 组，2026-11-19 纳入）
+
+**来源**：A6；`REC/GIF/STILL` 标签名主题早已提及，此处补齐真实骨架。骨架见 C11。
+
+**结构**：`STILL` 为描边胶囊（`border:1px solid #111827;color:#111827`）+ 灰字「静」；`GIF` 为黑底胶囊 + 灰字「实机」，两者成对。
+
+**触发**：同一素材同时给出静态截图与动态实机、需标注媒体验证状态时。标签不替代章节标题；只有单一状态时不强行配对。
+
+### 2.14 tab 式窗口卡头（C1 变体，A6 多处，2026-11-19 纳入）
+
+**来源**：A6 多处。骨架见 C12。
+
+**结构**：白底 tab `border:1px solid #E5E7EB;border-bottom:0;border-radius:7px 7px 0 0`，内含 6px `#0DA77D` 圆点 + 11px/700 内容标题，贴在图片上沿。与 C1「三圆点 + 文件名栏」是不同骨架。
+
+**触发**：给动态成品配「自定义标题 tab」并贴在图片上沿时；标题为内容槽位，按实际成品名填写。
+
+### 2.15 真题呈现块（C10 变体，2026-11-20 用户指定创建）
+
+**来源**：用户明确指定创建，复用 C10 `PROMPT` 骨架；非原作逐字节提取。骨架见 C13。
+
+**结构**：灰底圆角卡 `background:#F3F4F6;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden`；头部**固定**黑底「真题呈现」标签（不是 `PROMPT`）+ 内容标题槽位 + 灰字 `上下滑动 ↕`；内容区 `height:300px;overflow-y:scroll`，含作文材料正文（`color:#374151`）与**灰色写作要求句**（`color:#6B7280`，如「以上材料引发了你怎样的联想和思考？请写一篇文章。」）。
+
+```html
+<section style="background:#F3F4F6;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;"><section style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;border-bottom:1px solid #E5E7EB;"><section style="display:flex;align-items:center;gap:8px;min-width:0;"><span style="display:inline-block;background:#F3F4F6;color:#9CA3AF;font-family:'Avenir Next','Helvetica Neue',Roboto,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;padding:2px 6px;border-radius:3px;line-height:1.4;"><span leaf="">真题呈现</span></span><p style="margin:0;font-size:13px;font-weight:700;color:#111827;line-height:1.4;"><span leaf="">湖北鄂东南联盟11月联考</span></p></section><p style="margin:0;font-size:11px;color:#9CA3AF;line-height:1;letter-spacing:0.5px;white-space:nowrap;"><span leaf="">上下滑动 ↕</span></p></section><section style="height:300px;overflow-y:scroll;-webkit-overflow-scrolling:touch;box-sizing:border-box;padding:14px 16px 6px;"><p style="margin:0 0 8px;font-size:12px;color:#374151;line-height:1.9;text-align:left;overflow-wrap:anywhere;"><span leaf="">那些年我们在课堂上读过的文字，总有一些会在往后的日子里不请自来。它们或许曾以语言的光泽打动过你，或许曾借故事的体温捂热过你，又或许在懵懂年纪为你叩响过生命与社会的门扉…而一篇课文真正的完成，往往不在教室里，而在漫长人生的某次“重逢”里：你忽然从中认出了自己的来路，读懂了别人的悲欢，也照见了一个家庭、一个民族在时代风尘中跋涉的身影。此刻，浮上你心头的，又是哪篇课文？</span></p><p style="margin:0 0 8px;font-size:12px;color:#6B7280;line-height:1.9;text-align:left;overflow-wrap:anywhere;"><span leaf="">以上材料引发了你怎样的联想和思考？请写一篇文章。</span></p></section></section>
+```
+
+**触发**：文章需要原样呈现一道真题 / 联考 / 模考作文题，且要保留「材料正文 + 写作要求句」两个层级时用。
+
+**固定 vs 槽位**：固定的是「真题呈现」标签、`上下滑动 ↕`、卡片骨架与要求句灰色；每次按题目替换的是标题（哪里的联考 / 模考，如「湖北鄂东南联盟11月联考」）和材料正文。不得把普通提示词、代码块改套此组件，也不得把要求句改成强调样式。
+
+
+## 三、动态 SVG 动画生成规则（本主题核心，必做）
+
+### 3.1 封面场景动画（必做，不可降级）
+
+母版封面是一个 `1246×220` 的 SVG。左侧固定保留用户配置的像素 IP；**中间宽画布**先显示用户确认的介绍语“不做岸上的看客，只做深海里的求索者”，再让这段介绍语淡出，腾出同一块画布演出文章场景，最后恢复介绍语。**旧文案“AI时代的混子，长期摸鱼”已作废，不得再出现。**
+例：多模型文章的场景是“三盘模型卡挨个接入豆包工作台→工作台切换为低倍率模型→结果落位”；Seedream 文章演的是“文字排出→选框多轮改字→图层分离再合一”。场景内容随文章变，但左 IP 与介绍语机制不变。
+
+> **已验证母版优先（硬规则）**：若当前文章已有经用户确认的完整封面 SVG，必须保留其已有的 path 字形、字重、字号、字距、卡带动线和状态时间轴；只允许在独立的左侧 IP 图层替换为用户确认的透明 PNG。不得将完整母版简化重画为少数卡片或手工重排文字。多模型母版的 `Kimi → GLM → DeepSeek` 三张卡、三段工作台屏幕状态与 `8s` 节奏是一个整体；改动后必须分别截图核对三种屏幕状态，确认模型名、倍率和说明行无重叠、无裁切。
+
+**生成方法**：
+1. 提炼文章标题/核心卖点，构思一个能"演出来"的具象场景（物体进入、切换、状态变化、数字跳动）。
+2. **先做中间介绍态**：固定文案为“不做岸上的看客，只做深海里的求索者”，必须用 3.1b 的 `scripts/generate_cover_intro.py` 生成 16×16 点阵 `<path>` 字组（逗号前蓝灰 `#8291A5`，逗号后青绿 `#0DA77D`），放在左 IP 右侧的中间画布；约 0~15% 显示，约 15~20% 淡出；约 20~90% 由同一画布里的文章场景态取代；约 90~97% 恢复介绍语。循环时长按场景复杂度选择，实测样本可为 `5s` 或 `8s`，不得硬编码为单一时长。固定 IP 不随文字或场景淡出，不能用 `<text>`。
+3. 用 `<svg width="1246" height="220" viewBox="0 0 1246 220" preserveAspectRatio="xMidYMid meet">` 绘制，`<g>` 分层；样式带 `max-width:1246px;background:transparent;`。
+4. 每个会动的部件用 `<animateTransform type="translate|rotate|scale">` + `<animate attributeName="opacity">` 驱动，
+   封面统一使用单个场景周期（实测 `5s` 或 `8s`，按场景复杂度选择）并设 `repeatcount="indefinite"`；`calcmode="spline"` + `keysplines` 做缓动。
+5. 颜色守主题：墨黑 `#111827` 描边、青绿 `#0DA77D` 点睛、白/浅灰底，少量暖黄 `#FACC15` 提亮。
+6. 外包 `<section style="padding:0 12px;margin:0 0 22px;">`，SVG `style="display:block;width:100%;height:auto;max-width:1246px;margin:0 auto;background:transparent;"`。
+7. **IP 使用与公众号兼容规则**：当前用户确认的主题 IP 是“黑长发、学士帽、黄色眼镜、右手扶镜、怀抱书本”的毕业女孩像素形象。它是主题级固定资产，后续所有使用本主题的新文章均从母版继承；不得在单篇文章中临时替换、简化为卡通/emoji，或把参考图直接塞入文章。保留约 `2.2s` 的轻微呼吸动画。**最终封面不得在 SVG 内使用 `<image>`、`data:image/...`、外链图片或 `<foreignObject>` 承载人物**：公众号粘贴会过滤/丢失 SVG 内部位图，导致手机端人物消失。人物必须直接内联为纯 SVG `<path>`。
+   **源素材与封面资产必须分层，不能把“高清”误解为“高密度网格”**：
+   - 透明源固定为 `assets/theme-assets/ink-teal-tech/user-graduate-girl-ip-source-hd.png`。用户给白底参考图时，先用 `scripts/build_cover_ip_source.py` 仅去除**边缘连通的近白背景**；人物内部的白色书页、衣领、袜子必须保留，不能整张图按白色键控。
+   - `user-graduate-girl-ip-vector.svg`（160×298）用于高清/较大尺寸场景的保真资产；不得以平均插值、BOX 或双线性重采样生成。最近邻中心取样、仅可见像素参与量化、按颜色合并路径仍为硬要求。
+   - **1246×220 公众号封面必须使用封面专用资产** `assets/theme-assets/ink-teal-tech/user-graduate-girl-cover-pixel.svg`：`62×116` 逻辑网格、固定角色调色板、`shape-rendering="crispEdges"`。在封面内直接内联其 `<path>`，使用 `translate(30 14) scale(1.806452 1.801724)`，让显示范围恒为 `112×209`。禁止把 160×298 高密度网格用 `scale(小于 1)` 压到子像素：微信把整张 `1246px` 封面缩至手机宽度时会混合相邻深浅色，人物会发灰、发脏、轮廓消失。
+   - 资产流水线固定为：`build_cover_ip_source.py` 生成透明源 → `generate_cover_ip.py` 生成 `62×116` 封面 SVG 与 `160×298` 保真 SVG → 将封面 SVG 的 `<path>` 内联回 `cover-scene-animation.html` 的固定 IP 图层。最终文件始终是 SVG 路径，不是输入图片。
+   - `generate_cover_ip.py` 默认参数为 `--width 62 --height 116`。**禁止对 JPEG/抠图源的所有可见像素做全局 MEDIANCUT 或按面积自动选色**：大面积近黑褐压缩噪点会耗尽色位，吞掉金色流苏、黄色眼镜、白色书页与衣领，使手机端人物变灰脏。生成器必须使用固定角色调色板：冷黑蓝轮廓/衣袍 `#05070B/#111827/#1D202B/#2B3038`，暖棕发丝，暖肤色，金色 `#F8BD48/#D99A26`，黄色眼镜 `#FACC15`，白色/浅灰书页与衣领，以及蓝灰辅助色。它不是通用“降清晰度”，而是为手机端封面整体缩放保留可见像素块和角色颜色身份的专用派生资产。
+   - **眼镜几何门禁（2026-11-18 实测补充）**：`62×116` 粗网格**不得只靠源图降采样表现眼镜**。最近邻把金色细框、肤色与深瞳孔量化成脸中间一条橙黄横带，两枚镜框和眼睛会全部消失，看起来像"眼镜变成了中间一坨"。`generate_cover_ip.py` 在 `(width,height)==(62,116)` 时必须调用 `apply_cover_glasses()` 按几何重绘**左右两枚独立镜框 + 细暗金鼻梁 + 镜片内眼白/圆润深棕瞳孔/高光**；`160×298` 保真资产保留源图细节、不覆盖。旧的按旧 IP 校准的散点坐标表已作废。验收时须把脸部放大渲染，确认两个镜框分离、鼻梁是细线而非亮黄块、镜片内眼睛可见；仅看整人小图不足以发现糊化。
+   - 人物在手机端必须能辨认学士帽金色流苏、黄色眼镜与眼睛、黑发、扶镜手势、白领和怀抱书本、学士服与鞋；验证时必须截图 `390px` 宽预览，确认轮廓为深黑蓝、不是灰褐糊块。
+   - 不得改动人物身份、主体比例、尺寸、安全区或呼吸动画。
+8. 加 `aria-label="…"` 用一句话描述整幅动画演了什么（便于复核）。
+
+**参考样片**：`assets/theme-assets/ink-teal-tech/cover-scene-animation.html`（完整 8 秒场景动画）、`cover-title-animation.html`（标题动效）。新文章允许更换的仅是“中间场景语义层”；不得照抄原文的模型名、倍率或文章内容，但必须保留经验证母版的画布、左右安全区、文本路径生成法、层级关系和切换节奏。
+
+#### 3.1b 中间介绍语点阵字（当前用户文案，硬规则，2026-11-18 定稿）
+
+- **文案固定为**“不做岸上的看客，只做深海里的求索者”（17 字符，含逗号）。旧文案“AI时代的混子，长期摸鱼”已作废；未经用户明确要求不得改字、加字或删字。
+- **生成器**：`scripts/generate_cover_intro.py`。标准命令：
+  `/Users/Petrichr/venv/bin/python scripts/generate_cover_intro.py "不做岸上的看客，只做深海里的求索者" --out assets/theme-assets/ink-teal-tech/cover-intro-groups.xml`
+  生成结果已固化为 `assets/theme-assets/ink-teal-tech/cover-intro-groups.xml`，必须整段内联到封面 SVG 的「场景组之后、阴影之前」；新文章不得临时手写或临场重排。
+- **字模规格**：`/System/Library/Fonts/STHeiti Medium.ttc` 栅格化为 `16×16` 点阵，`--step 3.9`（17 字排进 1246 画布）、方块填充率 `0.95`、二值阈值 `100`；每个汉字拆上下两片，**两片必须共用整字 16×16 坐标系与同一个 `home_y`**，只靠不同飞散终点分离。禁止按片中心各自居中——会把字撕成上下两行碎片。
+- **排布**：`START_X = 170.0`、`HOME_TOP_Y = 112.0`（整行字中心≈画布 50%，IP 中心≈53%，对齐；旧值 `90` 偏上，用户明确要求下调，**禁止回退**）。逗号只占 `COMMA_SLOT_RATIO = 0.45` 字位并仅画底部小点，禁止占整字位造成前后半句大空档。首字可见左缘≈`174`，末字右缘≈`1191`，留 `55` 画布单位右安全边。
+- **配色**：逗号及之前蓝灰 `#8291A5`，逗号之后青绿 `#0DA77D`。
+- **动画骨架**：共 `33` 组（16 汉字×2 片 + 逗号 1 组），每组含 translate 飞散、scale `1→.74→.16`、字层 opacity `1;1;0;0;1;1 @ 0;.155;.20;.925;.97;1`、粒子 rect opacity `0;0;1;1;0;0 @ 0;.16;.195;.23;.265;1`、`8s` 无限循环。介绍语 opacity 与场景组 `0;0;1;1;0;0 @ 0;.22;.26;.875;.905;1` 严格互补。
+- **验收门禁**：必须逐帧检查 ①首帧整句可读、半句间隔自然、不裁切、不遮挡 IP；②约 `4s` 帧介绍语完全淡出，只剩场景与 IP；③约 `7.8s` 帧介绍语完整恢复、场景无残影；④`390px` 手机宽度下 17 字全部可辨、末字「者」不被裁。任一帧不满足即回退到 `cover-intro-groups.xml` 重注入，不得靠挪字或改字号掩盖。
+  **⚠️ 手机验收的测量陷阱**：Chrome headless 即使传 `--window-size=390`，布局视口仍被钳制为最小 `500px`，截图只是把 500px 页面裁成 390px，会把右半句误判成「被裁切」。正确做法是把内容容器强制为 `max-width:390px` 后再截图，或用真实设备/移动端模拟器验证；不得据此错误地去缩小字号或右移文字。
+
+#### 3.1a 封面母版复用与验收门禁（强制，不通过不得交付）
+
+**适用范围**：所有使用本主题的新文章封面，包括看起来较简单的主题。封面不是可以临场用普通文字和几个矩形“近似重画”的区域；它是主题中对字重、字距、缩放和时序最敏感的母版组件。
+
+1. **先选母版，后换场景**：优先从 `assets/theme-assets/ink-teal-tech/cover-scene-animation.html` 复制已验证的 SVG 分层结构。只在中间场景层替换与新文章有关的物件、标签和状态；左侧毕业女孩 IP、其阴影、人物安全区、介绍态、画布大小、各层前后关系与总时长不得随意改写。
+2. **所有视觉文字用路径，不用 SVG `<text>`**：封面内可见的中文、英文、型号、倍率、说明行都必须由 `scripts/glyph_to_path.py` 的 `glyph_layer()` 生成并嵌入为 `<path>`。不得依赖浏览器字体渲染，亦不得手工猜字号、`font-weight`、`letter-spacing` 或字宽。**唯一例外**：中间介绍语按 3.1b 用 `scripts/generate_cover_intro.py` 生成 16×16 点阵方块 `<path>`；它同样不依赖浏览器字体，但不得改用 `glyph_layer()` 或直接写 `<text>`。
+3. **绝不压缩独立信息行**：模型名、倍率、状态说明、工作台结果各自保留独立的路径层和母版确定的 x/y 区间。不得通过缩小字号、负字距、平移到同一行或叠放多个词来“塞进”场景。若新场景装不下，应精简场景信息，而不是侵占文字区。
+4. **人物安全区是硬边界**：毕业女孩封面专用粗像素纯 SVG 路径图层保持在最上方，几何基准等效于 `x="30" y="14" width="112" height="209"`（62×116 封面网格实现：`translate(30 14) scale(1.806452 1.801724)`）；呼吸动画保持 `0 → -3 → 0` 的原始幅度。**IP 与介绍语之间必须留明确间距**：IP 可视右缘约 `x=142`，介绍语首字「不」可见左缘约 `x=174`，间距约 `32` 画布单位（下限 `30`，作者母版约 `47`）；不得让 IP 紧贴首字。介绍语共 33 个字组，各有独立飞散动画坐标，禁止通过右移介绍语来拉开间距，只能左移 IP 及其阴影（阴影 cx 与 IP 中心同步，当前 `cx="86"`）。更换封面矢量网格分辨率时，必须重新计算 `scale`，使 `scaleX × 网格宽 = 112`、`scaleY × 网格高 = 209` 恒定，且不得将逻辑像素缩到小于 1。中间场景从人物右缘之后开始，所有可移动卡片、线条、标签均不得进入该区域。人物不得因换场景被放大、裁切或覆盖。
+5. **固定态与场景态互斥**：介绍语路径层与场景组必须使用互补的 `opacity` 时间窗；同一时刻不得同时可见两层文字。场景中的多个状态也必须按时间窗串行切换，不能只靠默认 `opacity=1` 叠在一起。
+6. **每一幕场景主体必须居中**：以用户已确认的场景镜头为视觉中心基准（当前基准为“方案初稿 → 人工核验”主体中心约 `x=723`），每个场景组都应整体移动到同一中心线；不能因为前一幕元素从 IP 右侧起飞，就把该幕场景主体压在画面左半边、留下右侧大面积空白。场景组内物件间的相对坐标、字形和动画不变，只对该镜头顶层 `<g>` 加统一 `translate(dx 0)` 校正；不得侵入 IP 安全区。
+7. **提交前逐帧验收**：至少渲染首帧、介绍语切出后、场景中段、场景末段/介绍语恢复四张截图；若采用三状态卡带，则另按 Kimi、GLM、DeepSeek 三个状态逐帧检查。每张图必须确认：a) 无任何文字相互重叠；b) 无文字/卡片被裁切；c) 人物完整且始终在最上层；d) 字重、字距和路径边界与母版一致；e) 介绍语与场景没有同屏残影；f) 每幕场景主体与已确认镜头在同一视觉中心线。
+8. **失败处理**：任一帧出现重叠、裁切、字重不一致、人物被遮挡或场景偏离中心，先回退到最近一次已验证母版，再缩小场景复杂度后重做中间场景层；禁止用临时改字号、挪字、换系统字体等方式局部掩盖问题。
+
+#### 3.1c 中间场景语义层重构法（2026-11-18 作者五篇封面对照后修订）
+
+**母版复用不等于把一套固定工作台换几行字。** 作者五篇样本共用的是人物、介绍语淡出/恢复、画布安全区与循环机制；中段则分别演出“对话卡接场记板产出胶片”“角色进入电脑完成任务”“散落群表文档被角色收拢”“资产搭成白模片场”“主图文字/选区/图层多轮编辑”。每篇都把文章的核心动作画成可观察的因果过程。
+
+因此换文章时先判断路由：
+
+1. **只有文章本身仍是“多个模型/卡片依次进入同一工作台”的主题**，才可复用三卡 + 工作台骨架，并按原 path 的 `d` 前缀与长度定点替换文字。卡片文字仍须按几何中心和统一字高生成；新字形用 `glyph_to_path.load_font()` + `word_paths()` 生成 path，禁止 `<text>`。
+2. **其他主题必须重建完整的中间场景组**，但不得重画封面外壳：保留 1246×220 画布、左 IP、阴影、介绍语 33 组、介绍/场景互补 opacity、总时长与安全区；只替换从场景顶层 `<g opacity="0">` 到其闭合标签之间的物件与动画。
+3. 新场景须先写成 `输入 → 关键动作 → 可验证结果` 的单句因果链，再按至少三段主镜头拆分。每一段只让一个主要变化占据中间舞台，不能把完整流程缩小塞在同一帧：例如本篇是“客户资料 → 事实/待确认/可复用三栏 → 可追溯判断 → 方案初稿 + 人工核验”。
+4. 场景内的文字、标签、说明行均用字形 path；每个物件要有可见动作（飞入/拆开/汇聚/勾选/盖章/展开/合并等）和因果连接，不能只有静态卡片或仅轮换文字。每一镜头优先放大主物件，出现“手机端读不清”的小字时，删减信息或拆分镜头，不缩小到流程图尺寸。
+5. 只更新场景的 `aria-label` 描述本篇具体因果过程；不要沿用基准文章的模型名、倍率、产品名或工作台标签。
+
+**验收**：用 JS `svg.pauseAnimations(); svg.setCurrentTime(t)` 精确控帧——headless 的 `--virtual-time-budget` 对 SMIL 推进不稳定，不能作为判帧依据。至少看 `0.5s`（介绍语）、每段主镜头的中段、`7.8s`（复位）以及固定 390px 容器下信息最密的场景帧。每帧确认介绍语/场景互斥、动作因果可读、主物件和文字不重叠不裁切、人物不被遮挡。
+
+#### 3.1d 作者封面场景的镜头语法与门禁（2026-11-18 五篇原始 SVG 二次逐帧复核）
+
+**本节覆盖此前“输入 → 动作 → 结果”的简化规则。** 那个表述只能避免氛围屏保，却仍会放行“船 + 虚线箭头 + 说明卡”这类信息图。作者的原作不是把文章逻辑画成流程图，而是在一个连续、可追踪的画面里，让具体物件完成一次可见的事件；观众不读标签，也应能看出发生了什么。
+
+| 原作 | 连续镜头里的动作 | 结果如何从同一场景长出 | 绝不等于 |
+|---|---|---|---|
+| LibTV | 对话/输入卡沿同一条连接链被送进场记板，场记板拍合 | 同一台场记板的右侧吐出具体影片格 | 左卡片 + 箭头 + 右结果卡 |
+| 自动化浏览器 | 角色进入复古电脑，鼠标在同一块屏幕内逐项点击 | 同一张清单的三项逐步变绿，最后在屏幕内出现完成印记 | 鼠标图标指向“任务完成”标签 |
+| 千问 Team Agent | 章鱼角色伸出不同触手，分别勾住散落的群、表、文档 | 被抓住的同一批物件在角色手中收拢、对齐、打勾 | 几张文件卡被虚线连到中间 |
+| RunningHub | 提示词和资产飞进同一块空间，搭成可站立的片场，角色在其中对打 | 整座已经成立的片场被压缩成横向胶片 | 素材图标通过箭头指向“成片”卡 |
+| Seedream | 同一张苹果汁主图被选框逐项改字，再把其玻璃层横向拉开 | 同一张主图的图层归拢为成图 | 多块独立面板做装饰性散开 |
+
+**核心定义：场景不是“概念 A 指向概念 B”，而是“物件 X 在同一世界中经历状态 S0 → S1 → S2”。**
+
+- **同一性**：主体、目标和空间必须可以跨帧追踪。结果态应是同一目标被点击、收拢、搭起、压缩、改写或完成后的状态，不能在远处另弹出一张“结果说明卡”。
+- **可见作用力**：每次变化必须来自看得见的接触、拖拽、插入、点击、搭建、压缩、展开、抓取或编辑。路径、手势、受力和结构变化本身就是叙事；一根“代表关系”的虚线箭头不是作用力。
+- **空间连续**：事件发生在一个稳定舞台内。物件可以进入、离开、移动和变形，但舞台关系不重置；不得在同一个场景窗内把左边的小图标、右边的说明卡用空白和箭头拆成两个世界。
+- **结果内生**：结果只由被作用对象的稳定新状态来证明，例如屏幕里的勾选、场地变成胶片、主图文字被替换、物件被收拢。禁止使用“操作完成”“灯火使史”这类解释性文案替代结果。
+- **镜头优先于寓意**：先选择文章中可被演出的一个具体瞬间，再决定隐喻；不能把“张岱写史”拆成船图标、箭头和史书卡。隐喻若不能在同一场景中演成物件行为，应换题材中的另一个可观察动作，而不是补标签说明。
+
+**强制分镜说明书（每篇开画前必须先产出，未通过不得写 SVG）：**
+
+1. **事件句**：用自然语言写“谁在什么空间里，对同一目标做了什么；目标随后怎样变了”。禁止出现“箭头、流程、卡片、标签、结果页、展示”这类设计词。
+2. **舞台常量**：列出贯穿场景的一个空间锚点和一个结果承载物。例如 RunningHub 是片场和胶片，Seedream 是同一张主图；不能只有互相指向的孤立图标。
+3. **状态表**：按 `S0 建立`、`S1 操作`、`S2 收束` 写三行。每一行都说明哪些物件延续自上一行、哪一个物理属性发生变化、为什么变化；无法指出延续物件即判为换页，不准制作。
+4. **动作动词**：只选一个主动作，限定为进入、点击、抓取、搭建、压缩、拉开、替换、收拢、插入、翻转等可观察动作。雪、雾、水纹、粒子、光点、呼吸只能作为从属质感，不能写在主动作栏。
+5. **无字测试**：去掉所有场景内文字和 `aria-label` 后，审核三张静帧是否仍能回答“谁在做什么、同一对象最后变成什么”。不能回答则说明靠文字讲故事，退回分镜。
+
+**SVG 与构图门禁：**
+
+1. 每个场景只保留一个连续事件线。输入物从侧方进入舞台、与目标发生作用、结果仍停留在该目标附近；主事件落在 IP 右侧可用舞台的视觉中心。留白用来读清轨迹与接触，不用来拉开“概念 A / 概念 B”。
+2. 进入、操作和结果不得靠整张互不相关的插画切换。使用同一组或同一组嵌套 `<g>` 保留对象身份；对于同一物件，连续使用 `translate`、`rotate`、`scale`、`skewX`、`opacity` 让其位移或改变结构。对象消失后出现另一个“结果卡”视为违规。
+3. 连线只允许作为真实结构的一部分：例如插头线、角色轨迹、屏幕内的选框、画面中的物理连接。**禁止独立的虚线箭头、流程箭头、A→B 连接符、指向说明卡的引导线**。原作中即便有绿轨迹，也服务于角色/物件的真实运动，不能单独承担语义。
+4. 禁止把抽象结论写在场景里充当结果。场景文字只允许作为真实物件上的必要内容，例如电脑屏内清单项、主图实际文案、胶片标识；文字必须用字形 path，并在 390px 验收下清晰。不能读清就删去，不能用小字解释画面。
+5. 动效按事件受力设计：进入/抵达用 `translate + 轻微 rotate`；点击/碰撞/完成用局部短促 `scale` 回弹；建造/生成用错相 `opacity + scale`；拆层/翻页必须真实 `skewX + translate`；汇聚/收拢必须给每一件输入物独立轨迹。全部使用 `calcMode="spline"`，禁止匀速漂移。
+6. 结果态必须留有足够停顿，让用户看见发生改变的同一对象，然后整体淡出并回到介绍语；不允许用绿色勾或文字卡强行宣布完成，除非“勾”本来就在被操作的同一对象内部，如电脑清单。
+7. **明确禁止**：流程图、箭头图、输入/输出说明卡、概念对概念的连线、景物静止加飘雪/水纹/云雾、建筑或人物无叙事作用地浮动、把三幅静态插画按 opacity 轮播、以参考图笔触替代事件设计、密集工程制图窗格。
+
+**场景验收加项：** 每段镜头必须输出输入刚建立、接触/作用正在发生、结果稳定三张固定时刻图，并逐项填写：`延续物件`、`可见作用力`、`被改变属性`、`结果承载物`。再做一次“无字测试”。其中任一项为空，或画面主要靠箭头/说明文字才能读懂，场景判为信息图或装饰动画，必须回到分镜说明书，不得微调后交付。
+
+### 3.2 正文动词动画（必做，按词现场生成）
+
+#### ★★ 核心机制（2026-11-16 从原文逐字节复核后确立，最高优先级）
+
+**动画不是摆在词旁边的独立装饰块，而是"字 ↔ 场景"在同一个词的位置原地交叉切换。**
+这是本主题与"普通动态图"的根本区别，务必按此实现，否则效果完全不对。
+
+原文实证：抓 `https://mp.weixin.qq.com/s/WKprgdKwDxuljfUECJR-Jg` 原文 HTML 并**逐帧渲染截图**核对（2026-11-16），
+正文里有 9 个词级内联小 SVG（尺寸 `31|46|60 × 22`，`display:inline-block;vertical-align:-5.7px;margin:0 1px`），
+每一个都是词本身变成了动画。以 **"昼夜"** 为例（31×22；原文句子是"水会顺着地势流，天气[SVG]跟着节气变"，
+正文"天气"是普通黑字，SVG 里的动画词是"昼夜"——注意字形是 path，grep 中文搜不到，必须渲染看），SVG 内叠两层、
+共享 `dur="3.8s" repeatCount="indefinite"`：
+
+- **字形层（文字态）**：`<path>` 画出的**"昼夜"**二字，**深蓝灰 `#374151` + 加粗**（fontTools 用 Medium/Bold 字重），
+  字号与正文一致（14px）；`opacity`=`1;1;0;0;1;1`，`keyTimes`=`0;0.1;0.16;0.82;0.88;1` —— 显示 → 隐去 → 恢复。
+  **关键：动画词的字不是正文那种纯黑常规字，而是偏蓝灰、加粗的一档**，和周围正文形成区分（像素采样：正文≈#000，动画词≈#304050）。
+- **场景层（场景态）**：昼夜变化图（深蓝夜空圆角底 + 黄色月牙 + 白星，白天态另配），`opacity`=`0;0;1;1;0;0`，
+  `keyTimes`=`0;0.15;0.17;0.79;0.82;1` —— 与字形层互补交替，场景自身还有 scale/translate 物理动作。
+
+肉眼效果 = **"昼夜"两个字（蓝灰加粗）→ 原地变成昼夜动画 → 动画放完 → 又变回"昼夜"（蓝灰加粗）**。
+原文 9 个词：昼夜、潜水、摔出来、砍一刀、往下、画/糊弄、接入……全是这套机制。
+
+**⚠️ 纠错备忘**：最初的示范把动画词错当成"天气"，且文字态用了默认字重、无加粗——都不对。
+动画词由画 path 决定，与紧邻的正文文字无关；判断某个词是不是动画词，必须渲染截图，不能 grep 文本。
+
+**泛化实现（任意词都能套，且不违反微信规则）**——关键：字形层不要用 `<text>`（中文会触发 leaf 警告），
+也不要用 `position:absolute` 叠加（微信不支持），而是**把词用字体转成 path，和场景 path 放进同一个 SVG**：
+
+1. **字形层 path**：用 fontTools + 中文字体把词转成 path（本机 `/System/Library/Fonts/STHeiti Medium.ttc`，
+   venv `/Users/Petrichr/venv/bin/python` 已装 fontTools 4.67）。参考脚本思路：
+   `font.getBestCmap()` 取每个字的 glyph → `SVGPathPen` 得 `d` → 外层 `transform="translate(x,size+2) scale(s,-s)"`
+   把 y 翻正、逐字按 advance 排布。颜色 `#374151`。
+   **⚠️ 基线必须 +2（2026-11-16 截图像素实测）**：字体转出的字形层相对正文基线偏高约 2 个 SVG 单位
+   （正文 y=190-217 vs 动画词 y=188-214），若不补，词看起来"偏上、没对齐"。脚本 `glyph_to_path.py` 的
+   `BASELINE_DY=2.0` 已内置此补偿。**场景层物件也必须同步下移 2**（外包 `<g transform="translate(0 2)">`），
+   否则字与场景错位、交替时跳变。
+2. **场景层 path**：按下面 3.2 的语义类/叙事语法，AI 现场画该词的具象场景 path。
+3. **同一 SVG 内交叉**：字形层 `opacity 1;1;0;0;1;1` + 场景层 `opacity 0;0;1;1;0;0`，
+   共享 `dur="3.8s"`、`calcMode="spline"`，场景层外面再套 scale `0;0;1.1;1;1;0;0` 做弹出。
+   SVG 仍用 `width=词宽 height=22 viewBox`，`role="img" aria-label="…"` 描述词义。
+4. 相邻正文文字照常用 `<span leaf="">`；SVG 是图形不用 leaf。这样既 1:1 还原原文，又能套任意新词，
+   且校验器 0 ERROR / 0 WARNING。
+
+**验收样例**：`词内动画示范_1比1复刻.html`（工作区）——用"暴涨/钻进/蒸发/点亮"四个原文没有的新词验证泛化，
+字形 path 由字体生成、场景 path 现场画、同 SVG 交叉，校验完全合规。以后排版必须照此，不得做成独立动画块。
+
+#### ★★★ 画风与手法的真实规格（2026-11-16 追加：同作者 5 篇、49 个词级 SVG 逐字节拆解后确立，覆盖上文简化描述）
+
+上文"昼夜"那套两段式是**机制骨架**，但拿它直接画词会显得"假、糙"。5 篇真实词级 SVG（LibTV接入/完全打通/爬楼/图层分离/小字/门槛/空间锚点…共 49 个）拆开后，
+真正的画风与手法规格如下。**这里与上文冲突时，以本节为准**——这是把"能动的图"升级成"和原文一样的图"的关键。
+
+**1. 画风：细线手绘线稿，绝不是大色块 / 深色圆角底框**
+- 描边 `stroke="#22262B"`，粗细 **0.5~1.3px**（统计众数 `.8/.9/1.1/.7`）；**禁止**用我早期示范那种 `stroke-width="1.4/1.6"` 的粗线。
+- 填充以 `#FFFFFF` 白 + `#374151` 蓝灰字为主，五色点睛；**绝大多数词没有整块彩色背景**（早期示范给的"蓝色圆角胶囊底"是错的，只有"完全打通"这类少数才用 `#D1FAE5` 浅绿底）。
+- 物件是一笔一笔的手绘 `<path>`（圆角、Q/T 曲线、虚线），不是 `<rect>/<circle>` 拼的几何块。
+
+**2. 成套语义色板（不是只有 #0DA77D 一个绿）**
+统计 49 个词的真实用色，按语义取色：
+| 用途 | 色值 | 出现 |
+|---|---|---|
+| 主描边/线稿 | `#22262B` | 305 次（最高，绝对主力） |
+| 动画词字形 | `#374151` | 136 次（深蓝灰，加粗） |
+| 点睛绿（完成/正确/连接） | `#0DA77D` | 151 次 + 深绿 `#047857` |
+| 警示红（错误/否定/拦下） | `#E5484D` / `#F2545B` | 27 次（真假难辨❌、门槛、直接拦下） |
+| 高亮黄（闪光/强调/货币） | `#F5B800` / `#FACC15` / `#FFD84D` | 数十次（含税到手价、完全打通放射线） |
+| 信息蓝（数据/天/图层） | `#BAE6FD` / `#A5D8F5` / `#DBEAFE` / `#60A5FA` | 图层分离、水碗 |
+| 辅助灰 | `#9CA3AF` / `#D1D5DB` / `#8C939E` | 阴影线、次要物件 |
+
+**3. 结构：一词 = 1~3 个物件（克制），不是一个 filled 大图**
+场景层由多个独立 `<g opacity="0">` 子层叠成（统计:少则 1 层，多则 20+ 层，如"完全打通"16 层、"Team Agent"20 层），
+每层一个物件、各有自己的 `opacity` 窗口和 `animateTransform`，**错峰登场**（keyTimes 精确错开 0.01~0.03，像接力）。
+
+**4. 时间：字态占大头，场景在一个窄窗口里密集演完**
+- `dur` **不是固定 3.8s**：3.6s / 3.8s / 3.9s / 5.6s 都可能（a1 篇用 5.6s、a2 篇用 3.90s），按词自定。
+- 字态通常从 0 显示到 `0.14~0.26` 才隐去；场景集中在 `0.14~0.82` 窗口内逐个子层接力；末尾复位回字。
+- 早期示范让字只显示 `0~0.1` 就切场景，字几乎看不见——太短，要拉长字态停留。
+
+**5. 手法比"scale/translate/rotate"多：还有 skewX 倾斜**
+49 词全量统计：`scale` 297、`translate` 185、`rotate` 54、**`skewX` 8、`skewY` 1**。
+- `skewX` 用来做"倾斜卡片/图层错位/翻页"的斜切（如"图层分离"三层用 `skewX` 错位拉开）——这类词必须用 skew，不能只 translate。
+- 组合拳：一个物件常同时挂 `translate`+`scale`（挤压回弹 `scale 1;1;1.14 .8;1 1`）+`rotate`（摆动）。
+
+**6. 新增一大类"字 + 微装饰"（此前完全漏掉）**
+相当多词**不把字换成图**，而是保留蓝灰词本身、只加一个极小的手绘标记表达语义：
+- "真假难辨"= 真字 + 红 `#E5484D` 叉/圈；"Team Agent" = 字 + 青绿对勾 + 小星点；
+- "小字" = "小"字 + 青绿放大镜；"看一眼" = 👁 眼 + 青绿对勾；"直接拦下" = 字 + 红色禁止符；
+- "点鼠标的那个角色" = 字 + 两端青绿小括号/箭头。
+→ 判据：**词本身已是语义主体、只需轻轻一点就懂**时，用微装饰，别硬画大场景。
+
+**7. 圈注类是【静态独立组件】，不是动画（纠正上文第 11 类；2026-11-18 按作者原文再次校正）**
+"单间冒充两房/网页工作台/特别费眼/空间锚点/只动哪里"5 个词实测：`animate=0`、`dur` 为空——字与圈一次画完不动。
+2026-11-18 从作者千问篇「…排成了一个[网页工作台]」逐字节复核，**修正此前三处错误描述**：
+- 圈描边是 **`#047857`**（深青绿），不是 `#0DA77D`；`stroke-width="1.3"`、`stroke-linecap/linejoin="round"`、`fill="none"`。
+- 圈是**一条开口的手绘椭圆 path，末端带收笔尾迹**（`…Q-1.6 6.2 -0.2 4.9L1.3 3.5`），不是四段贝塞尔 `Z` 闭合的规整椭圆，更不是 CSS `border-radius:50%`。上文与旧演示里的闭合贝塞尔近似式（`M-5 10 C-5 4 … Z`）**作废**。
+- 字形是字体转出的 `<path>`，填充 **`#111827`**（比正文深一档），不是动画词的蓝灰 `#374151`；圈与字在**同一个** inline SVG 内。
+- 母版 `width=74 height=22`、`margin:0 7px`、`vertical-align:-5.7px`、`overflow:visible`。
+→ 精确实现、任意词生成命令与验收标准统一见 **2.8 圈注词**（已纳入封闭白名单）。本节只保留语义归类：圈注用于「重点 / 就是这里 / 注意这个」这类需要圈出的词，全文 ≤3 处，不替代普通加粗或下划线，也不放进「字 ↔ 场景」交叉动画层。
+
+**SVG 宽度必须够放字形，绝不手填（否则字挤在一起/与邻字重叠，用户已指出过）**
+- `width`/`viewBox` 宽度 **取 `glyph_layer()` 返回的 width**（= 各字 advance 之和 + 2；双字≈32px），场景若超出该宽度再追加留白（放大镜/圈这类外扩元素另加，如查证36、关键46）。
+- 严禁凭印象写死小于返回值的值——曾把双字词"错位"写成 `width=26`（<字形32），导致"错/位"挤压重叠且"位"与后字"了"连体。改成 ≥32 即恢复正常。
+- **验收**：渲染后看词内各字间距是否与正文一致、与相邻文字不粘连。
+
+**判词速查（先归类再动手）**：① 能用小标记点透 → 字+微装饰；② 只需圈出强调 → 静态圈注；
+③ 有明确物理动作/物件 → 细线手绘场景（1~3 物件、错峰接力、按语义色板取色、需要时上 skewX）。
+
+#### ★ 通用决策框架：任意文字 → 动画（面对没见过的词也能用）
+
+用户的核心诉求：**不是记住这几个词的动画，而是给任意文字都能设计出贴切的动画**。下面是从 28 个母版动画里抽象出的推理链，对任何新词按此四步走：
+
+**第 1 步 · 该不该配动画（选词）**——只给满足以下之一的词配；全篇 5–13 个（与正文长度正相关，约每 30~80 字一个），宁缺毋滥。
+2026-11-16 追加分析同作者 5 篇系列文章（49 个真实动画词）后，选词规律确证如下：
+- ① 动作动词（主力）：砍/摔/冲/钻/冒/掉/涨/飞/接入/打通/来回搬/乱飞/调通/爬楼/翻/往后推/拦下/跑起来/插入/抽卡
+- ② 状态变化/结果词：变/亮/灭/化/省/全对齐了/接到了一起/真假难辨/门又关上了/成片/建好了/拖延
+- ③ 具象名词（可作隐喻载体）：天气/昼夜/钱/水碗/标签页/搬运工/门槛/三板斧/图层/小字/整个房间
+- ④ 抽象概念（需翻译成画面）：糊弄/接入/免费/成本/含税到手价/从低到高/碰运气/短板/吼一嗓子
+- ⑤ 中英产品名/术语也能做（能"演"就配）：LibTV接入WorkBuddy / Team Agent / Pinterest / Seedream 5.5
+- 形容词、连词、普通名词不配。
+- **判断某词是不是动画词必须渲染截图看**：字形是 path，正文文本里 grep 不到（曾把"昼夜"误当成"天气"）。
+
+**第 2 步 · 定隐喻（最重要）**——把词翻译到一个**语义类**，每类有默认的"物件 + 动作"配方（见面熟词直接用，新词按语义归到最近的类）：
+
+| 语义类 | 触发词举例（含母版外的新词） | 隐喻物件 | 默认物理动作 | 主变换 |
+|---|---|---|---|---|
+| 削减/下降 | 砍/省/降/降本/缩水/打折/裁/削 | 斧头 / 存钱罐+硬币 / 下沉的数字 | 劈下；硬币飞入罐口缩没；字下沉 | rotate + translate↓ |
+| 上升/增长 | 涨/升/暴涨/回血/增加/攀升 | 上浮的箭头/数字/气球 | 上浮+放大 | translate↑ + scale |
+| 跌落/失控 | 摔/掉/崩/跌/坠落/滑落 | 人/物（简笔） | 抬起→抛物滑翔→翻倾 | translate 抛物 + rotate |
+| 冲刺/疾速 | 冲/窜/跑/飞奔/抢/冲刺 | 小人或箭头 | 多元素快速连发前冲 | translate 大幅 + scale |
+| 显现/揭示 | 出现/冒/弹出/浮现/生成/蹦出 | 目标物本身 | 从无到有弹出（0→1.3→1） | scale 0→1.3→1 + opacity |
+| 消失/隐藏 | 灭/消失/抹掉/蒸发/隐去 | 目标物本身 | 缩小淡出 | scale→0 + opacity |
+| 变化/交替 | 天气/昼夜/切换/转变/轮换 | 双状态底(如昼↔夜)+点缀物 | 两状态交叉淡入，点缀物依次弹 | opacity 交叉 + scale |
+| 绘制/虚构 | 画/糊弄/编/瞎编/捏造/描 | 铅笔/方块/笔画 | 描边生长→揭示真身→抖动 | dashoffset + opacity + scale |
+| 连接/接入 | 接入/连接/兼容/打通/牵手 | 卡带/插头/线 | 物件飞入或插入槽位 | translate 飞入 + scale |
+| 潜入/穿行 | 潜水/钻/穿/过/钻进 | 载体(小船/鱼/人)+水花 | 移动+起伏 | translate + rotate 微摆 |
+| 圈注/划重点（11类，静态独立组件） | 单间冒充两房/网页工作台/特别费眼/空间锚点/只动哪里/就是这里/注意这个 | 深青绿 `#047857` 手绘**开口**椭圆 + `#111827` 字形 path | **无动画**：一次画完，字+圈静止 | 纯 path，`margin:0 7px`；详见 **2.8** 与上方第 7 条 |
+| 字+微装饰（12类，新增） | 真假难辨/Team Agent/小字/看一眼/直接拦下/点鼠标的那个角色 | 蓝灰词本身 + 极小手绘标记(叉/勾/放大镜/眼/括号) | 字保留，标记轻微弹一下或静止 | scale 微弹 + opacity，绝不画大场景 |
+
+> 新词处理：先问"它在说什么物理动作"，归到最近的一类，套该类的物件与动作；物件可以按文章内容替换（如"省钱"在别的文章可换成存钱罐以外的东西，但"硬币投入容器"这个动作逻辑不变）。
+
+**第 3 步 · 套叙事分镜**——按 3.2 的"五条底层语法"装配：描边生长画出物件 → opacity 交叉揭示 → 物理动作(弹/翻/飞/落) → 复位。同一 dur=3.8s 内用 keyTimes 编排。
+
+**第 4 步 · 现场绘制**——字形层用字体把词转成 path（见上方核心机制），场景层的物件 `<path>` 手绘（手绘风），按语义类调 keySplines（弹性用 `0.23 1 0.32 1`，平滑用 `0.45 0 0.55 1`），两层放进同一个 SVG 交叉。**每个词的场景 path 和 keyTimes 都现画现调**，不复制现成片段——这是"按词设计"和"内置词库"的根本区别。
+
+---
+
+母版正文里每个有画面感的动词上都嵌了一个小动画，尺寸统一、内联在文字流中：
+- 尺寸 `width="46|31|60"` × `height="22"`（词语越长越宽），`viewBox` 对应；`width="14"` 的用于胶囊内嵌图标
+- 内联样式 `display:inline-block;vertical-align:-5.7px;overflow:visible;transform:scale(1);margin:0 1px;`
+- 全部手绘风 `<path>`（不用 rect/circle 拼几何块），墨黑 `#22262B` 描边 + 主题点睛色填充
+- 统一节奏 `dur="3.8s" repeatcount="indefinite"`，`keyTimes` 精确到 0.01，`calcMode="spline"` + `keySplines="0.45 0 0.55 1"`（缓入缓出）/ `"0.23 1 0.32 1"`（急停）
+- `<svg>` 直接插在动词紧邻位置，随文字排列
+
+#### ⚠️ 核心：动画不是"让字动一下"，而是把一个词演成一个微型故事
+
+**五条底层语法（必须套用，缺一就是浅层效果）**：
+
+1. **具象化隐喻**：把抽象动词翻译成一个看得见的**具体物件 + 动作**，不是把字放大缩小。
+   - 省 / 省钱 → 粉色存钱罐 `#F472B6` + 黄色硬币 `#FBBF24` 投进去
+   - 砍 / 砍一刀 → 斧头 path 抬起劈下
+   - 画 / 糊弄 → 一支彩色铅笔飞进来画方块
+   - 天气 / 昼夜 → 天空底白天蓝↔夜深蓝，太阳/月亮/云/星依次弹
+   - 钓鱼 → 先画出弯曲下划线，一条鱼从线下蹦出再落下
+2. **分阶段叠加**：一个动画 = 3~4 个时间段，每段用 opacity 交叉切换，像分镜。典型编排：
+   - `画出(0~0.25)` → `揭示/变形(0.25~0.5)` → `强调/物理动作(0.5~0.8)` → `退场/复位(0.8~1)`
+   - 交叉淡入用成对的 `opacity 1;1;0;0;1;1` 和 `0;0;1;1;0;0`，keyTimes 错开 0.01~0.05 形成"接管"
+3. **描边生长（stroke 手绘）**：让图形"画出来"而不是淡入——
+   `stroke-dasharray="周长"` + `stroke-dashoffset="周长"` → `<animate attributeName="stroke-dashoffset" values="周长;周长;0;0">`
+   母版方块周长 40.8，曲线用 33.6；字/物件的轮廓都用它逐笔画出。
+4. **物理动效（拒绝匀速）**：
+   - 弹性回弹 `scale 1;1;.4;1.1;1;1`（先压扁再弹过头再回正）——字揭示后的"抖一下"
+   - 抛物下落/滑翔 `translate 0 -7;0 .6;13.5 9.5` 配 `rotate 0;0;62;62;0`（胖员外抬起→滑翔→翻倾摔出）
+   - 飞入塞入 `translate 46.5 11.3;18.35 5` 配 `scale 1;1;.2;.2`（硬币飞向罐口缩没）
+   - 弹出放大 `scale 0;0;1.3;1;1;0;0`（太阳/月亮/星依次冒出）
+5. **统一呼吸感**：所有段共享**同一个 `dur`（按词定，3.6/3.8/3.9/5.6s 均可，勿一律 3.8s）**，靠 `keyTimes` 把多个子动作编排进同一周期；背景元素轻微 `scale 1;1;.86 1.1;1`（呼吸）不抢戏。字态停留要够长（到 `0.14~0.26` 才隐去），别一上来就切场景。
+
+#### 生成流程（每个动词必做）
+1. 通读正文，挑出**能演成微型故事**的动词/名词（全篇 6–10 个，不要滥用）。
+2. 为每个词定一个**隐喻物件**（见语法1），画出它的 `<path>` 轮廓（手绘风，非几何拼接）。
+3. 套**分阶段时间轴**：先用 stroke-dashoffset 画出轮廓 → opacity 交叉揭示主体 → 加物理动作（弹/翻/飞/落）→ 复位。
+4. keyTimes 写到 0.01 精度，缓动用 spline；把动画插到该动词紧邻位置。
+5. 关键：**字形用字体转 path，场景物件/path/keyTimes 都现画现调，两层在同一 SVG 内做"字→动画→字"交叉**——这是"AI 按词设计"而非"内置词库"的根本区别。
+
+#### 母版真实案例拆解（作为设计范本，勿照抄内容）
+| 动词 | 隐喻与分镜 | 关键参数 |
+|---|---|---|
+| 画几个方块糊弄你 | 4 个灰方块 stroke 描边画出→淡出露出汉字→字弹性抖动→彩铅从右上飞入 | `dashoffset 40.8→0`；字 `scale 1;.4;1.1;1`；笔 `translate 64 -8→2.9 6.3` |
+| 天气跟着节气变 | 天空底昼↔夜交叉淡入；太阳/月亮/云/星 scale 依次弹出并平移 | `#BAE6FD↔#3B4A6B`；`scale 0;0;1.3;1;1;0;0`；`translate 0→14.6` |
+| 胖员外就会摔出来 | 人抬起→右下滑翔→身体翻倾摔出 | `translate 0 -7;0 .6;13.5 9.5` + `rotate 0;0;62;62;0` + `scale 1;.5;1.12;1` |
+| 大头直接被省掉 | 存钱罐现身；硬币从右上飞向罐口并缩没；罐身鼓一下 | 硬币 `translate 46.5 11.3;18.35 5`+`scale 1;1;.2;.2`；罐 `scale 1;1;1.08 .9;1` |
+| 往下砍一截 / 砍一刀 | 斧头抬起劈下 + 被砍物掉落 | `rotate -52;8;0` + translate 向下 |
+| 钓鱼（曲线下划线蹦鱼） | 先描边画弯曲下划线，鱼从线下弹出→下落 | `stroke-dashoffset` 画曲线 + 鱼 `translate` 弹出下落 |
+
+**5 篇同系列真实案例补充（2026-11-16，更贴近真实画风，优先参考这些）**：
+| 词 | 真实画法（细线手绘，非色块） | 手法要点 |
+|---|---|---|
+| 爬楼 | 3 个小人沿楼梯格逐级上移 + 青绿对话气泡；纯 `#22262B` 细线 `.9/1.1`，白底 | 多子层错峰 `translate` 接力上升，字态到 `0.17` 才隐 |
+| 图层分离 | 3 张半透明卡片用 **`skewX` 斜切错位拉开**，蓝/绿/黄分层 | skewX 3 次 + translate + scale，一词三物件 |
+| 完全打通 | 浅绿 `#D1FAE5` 胶囊底 + 波浪线贯通 + 多个字块逐个弹入 + 黄 `#F5B800` 放射线 + 扩散圈 | 16 个子层，`dur=5.6s`，物件在 `0.66~0.93` 密集接力 |
+| 含税到手价 | `¥` 符号 + 价签条 + 红 `#F2545B` "到手价"角标 | 字+微装饰 + 警示红点睛 |
+| 真假难辨 | "真"字 + 红叉/红圈标记，字本身不动 | 字+微装饰（静态标记） |
+| 空间锚点 / 只动哪里 | 蓝灰加粗字 + 青绿手绘椭圆圈，**完全静止** | `animate=0`，`margin:0 7px` |
+| 门槛 | 跨栏物件 + 黄 `#FFD84D` 点缀 + 多重绿描边 | 7 段 scale + 4 段 translate，`dur=3.90s` |
+
+#### 参考样片（`assets/theme-assets/ink-teal-tech/`，逐帧研究其 path 与 keyTimes）
+| 文件 | 演示的叙事手法 |
+|---|---|
+| `verb_10.html` | 描边画出方块→揭示汉字→弹性抖动→彩铅飞入（四阶段范本） |
+| `verb_30.html` | 昼夜交叉淡入 + 日月云星依次弹出（天气范本） |
+| `verb_39.html` | 抬起→滑翔→翻倾摔出（物理抛物范本） |
+| `verb_70.html` | 存钱罐 + 硬币飞入缩没（具象化隐喻范本） |
+| `verb_80.html` | 斧劈式砍/降（rotate 劈砍范本） |
+| `verb_45.html` | 爆兵冲刺（多元素连发范本） |
+| `verb_52.html` | 精神值下沉（translate+scale 范本） |
+
+### 3.3 动画技术约束（沿用技能规则）
+- 全部用 SMIL（`<animate>`/`<animateTransform>`），微信内保留，勿删。
+- 无阴影、无渐变；层次靠细线框 + 留白。
+- 动画节点无需 `<span leaf>` 包裹（它是图形不是文字），但相邻文字仍需 leaf。
+- 字号不超 24px；font-family 只在全局容器声明（等宽标签 9a 例外）。
+
+
+## 四、主题编排引擎（最高优先级：不要把单篇文章骨架当模板）
+
+> **2026-11-16 重新从同作者 5 篇文章 + 1:1 参考页倒推。**
+> 作者稳定的是一套「视觉语法」，不是一条固定的文章顺序。此前把参考页的“步骤 → 产品条目 → 总账 → HEADS UP → END”固化成完整骨架，导致新文章看起来像被塞进一张表单。这一节覆盖旧的固定骨架规则。
+
+### 4.1 先查封闭白名单，再决定内容是否要变成组件
+
+本主题**不从内容意图反推组件或标签外壳**。对每个内容单元只问两件事：这个结构在不在「已验证母版组件库」2.1–2.14 内？原文有没有与母版相同的触发条件？两者都成立才用；否则一律回落 2.1 正文 + 4.3 行内强调。下表是**封闭白名单清单**，不是按语义挑选的候选表：
+
+| 信息单元 | 白名单组件 | 触发条件（必须同时满足） | 不该使用的情况 |
+|---|---|---|---|
+| 普通叙述 / 观点 / 引用 / 列表 / 表格 / 代码 | **2.1 正文 + 4.3 行内强调** | 默认路由 | 想用引用块、卡片或数据卡「丰富版式」时 |
+| 线性可复现流程 | 2.2 步骤块 | 步骤不可互换、≥2 步，且原文有相同步骤结构 | 体验叙述、观点或结论段 |
+| 同级实测情境（输入/操作 → 观察/结果） | 2.3 CASE 胶囊变体 | 同篇 ≥2 个可比较情境，且原文有对应实测/案例结构；标签写 `CASE 01/02/03` + 母版 14×14 动效图标 | 单纯罗列参数、只有单个对象或教程步骤 |
+| 界面/过程截图 | 2.4 窗口式配图卡 | 有用户提供的真实 UI / 过程截图 | 没有真实图片时 |
+| 视觉成片/原图 | 2.5 纯图片块 | 有用户提供的真实图片 | 没有真实图片时 |
+| 真实图注 | 2.5b 图片说明文字 | 原文/材料确有说明文字 | 为凑组件虚构图注 |
+| 文章收束 | 2.7 `/// END` | 当前母版与原文均有收束标记 | 为凑组件新增作者区或 CTA |
+| 需圈出的强调词 | 2.8 圈注词 | 原文出现「重点 / 就是这里 / 注意这个」类词，全文 ≤3 处 | 普通加粗、数据强调、下划线 |
+| 章节分隔 | 2.9 三方块分隔符 | 母版与原文均有同级分隔结构 | 为凑节奏新增 |
+| 风险 / 限制 / 避坑信息 | 2.6 `HEADS UP` 提示块 | 原文确有明确风险、限制、前提或避坑信息，骨架取自主版参考页 | 一般提醒、注意事项、为丰富版式硬塞 |
+| 同一对象连续多页 / 前后对比 | 2.10 `GALLERY` 横向图集 | 原文为多页并列且滑动本身能说明问题 | 无关图片凑画廊 |
+| 多段并列 + 内容相关组名 | 2.11 内容标题横向轨 | 多段视频/图片并列、组名随内容变化；标题为槽位不照抄 | 套用原文「天文课」等实例文案 |
+| 大段可复制提示词 / 代码 | 2.12 `PROMPT` 滚动块 | 原文确有该结构、需限定高度滚动（代码回落的唯一例外） | 普通代码块硬套滚动卡 |
+| 静态截图 + 动态实机对照 | 2.13 `STILL/GIF` 标签 | 同一素材两种状态都要标注 | 只有单一状态时强行配对 |
+| 成品配自定义标题 tab | 2.14 tab 式窗口卡头 | 动态成品需贴标题 tab 在图片上沿 | 与 C1 三圆点窗口卡混用 |
+| 原样呈现真题/模考作文题 | 2.15 真题呈现块 | 需材料正文 + 灰色要求句两层、保留滚动 | 普通提示词/代码块套此组件 |
+
+**明确禁用（不在封闭白名单内，不得按内容意图取用）**：`PART` / `MORE` / `BONUS`、目录、引言卡、尾部签名区、数据表格、对比表、流程示意图、引用块、金句卡、提示卡。它们即使「语义合适」也不能自动启用；确需使用时必须先取得对应作者成品的逐字节视觉证据并**经用户确认**。`STEP` / `CASE` / `REC` 标签只在母版与原文均有相同标记时使用，不得仅凭语义自动生成。（`STILL` / `GIF` 已于 2026-11-19 纳入 2.13 白名单，按该节触发条件取用。）
+
+**一个内容单元只选一种结构**，且必须先在白名单内找到对应项；找不到就回落 2.1 正文 + 4.3 行内强调。
+
+### 4.2 媒体先分类，再选容器
+
+五篇作者文章的共同点不是“所有图片都套一个卡”，而是把图片当作证据，按素材性质决定容器：
+
+| 素材性质 | 容器 | 触发条件 | 细节 |
+|---|---|---|---|
+| 产品 UI、任务过程、结果截图 | 2.4 窗口式配图卡 | 需要读者知道它来自哪个工具/页面/文件 | 三圆点 + `#F3F4F6` 标题栏 + 10px 等宽来源名；常规证据图的默认选择 |
+| 原始成片、摄影图、视觉成品 | 2.5 纯图片块 | 图片本身就是内容，不需要“软件窗口”语境 | 仅保留 `#E5E7EB` 细边；不假装成 UI |
+| 图前/图后解释 | 2.5b 图片说明文字 | 原文或材料有真实图注、来源、看点说明 | 12px 左对齐；不能为凑组件虚构图注 |
+| 同一对象的连续状态、多页画面、并列前后对比 | 2.10 `GALLERY` / 2.11 内容标题轨 | 只有并列关系本身能说明问题时 | 允许 `overflow-x:scroll`；禁止把无关图片做成画廊；2.11 标题为内容槽位 |
+| 录屏/GIF/动态演示 | 2.13 `STILL/GIF` 标签 + 对应图片容器 | 需要明确“这是一段动态过程” | 用 `STILL`/`GIF` 标签说明，标签不替代章节标题 |
+
+### 4.3 正文行内强调（封闭白名单 · 唯一允许的行内样式）
+
+> **取证口径（2026-11-19）**：从同作者 01–05 五篇成品 HTML 的 `<p>` 段落内逐字节提取带强调声明的 `<span>`，共 **90 处命中 / 18 种 CSS 写法**，按语义归并为下表 **7 类**。母版里 `rgb(17, 24, 39)` 与 `#111827`、`rgb(252, 231, 166)` 与 `#FCE7A6` 是同一类的两种序列化，二选一即可。**本表是唯一依据；不得按语义派生、组合或新造样式。**
+
+统一包装骨架（照抄；`{{STYLE}}` 只替换为下表 E1–E7 的完整 style 值，`{{词}}` 为 4–15 字短语）：
+
+```html
+<span style="{{STYLE}}"><span leaf="">{{词}}</span></span>
+```
+
+| 编号 | 语义 | 完整 style 值 | 母版实证 | 触发条件 |
+|---|---|---|---|---|
+| E1 | 事实 / 数据 / 产品名·墨黑加粗 | `color:#111827;font-weight:700;` | 42 处（01/02/03/04/05） | 时间、价格、数量、准确率、产品名、关键能力 |
+| E2 | 作者判断·墨黑下划线 | `color:#111827;font-weight:600;border-bottom:1px solid #111827;padding-bottom:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone;` | 16 处（02/03/04/05） | 一句话结论、选购判断、方法论判断 |
+| E3 | 作者判断·青绿下划线 | `border-bottom:1px solid #4FA883;padding-bottom:1px;font-weight:600;` | 2 处（02） | 需与墨黑判断区分的次级判断；全文 ≤3 处 |
+| E4 | 最终结论·点阵底 | `color:#111827;font-weight:600;padding:1px 3px;background:radial-gradient(#C4C4C4 0.7px,rgba(255,255,255,0) 0.9px) 0 0/3.5px 3.5px;-webkit-box-decoration-break:clone;box-decoration-break:clone;` | 8 处（03/04/05） | 每个大段最多一处，用于「这一段最终说明什么」；**全文 ≤5 处** |
+| E5 | 重点短语·荧光笔半高亮 | `background:linear-gradient(180deg,rgba(255,255,255,0) 58%,#FCE7A6 58%);padding:0 2px;font-weight:600;color:#111827;` | 8 处（01/02） | 需要一眼扫到的短语、关键动作；全文 ≤5 处 |
+| E6 | 数量 / 名词·斜纹底 | `color:#111827;font-weight:600;padding:1px 3px;background:repeating-linear-gradient(-45deg,#DADADA 0px,#DADADA 1px,rgba(255,255,255,0) 1px,rgba(255,255,255,0) 4px);-webkit-box-decoration-break:clone;box-decoration-break:clone;` | 2 处（03） | 数量、文件名、版本名；全文 ≤3 处 |
+| E7 | 短语·浅绿底色块 | `background:#D3F1E2;color:#111827;padding:0 2px;` | 6 处（01） | **仅限**作者自撰的引导句 / 小结判断（母版实证：先说用下来的感受、这个组合最顺手的地方在于分工清楚、1.5 平米成片、苦情和口号已经被做满了、凌晨两点的水碗成片、现在比的是流程）；全文 ≤3 处。母版另有 `background:rgb(211,241,226);padding:2px 4px;` 变体，等价 |
+
+**密度门禁（强制，交付前由 `validate_gzh_html.py --theme ink-teal-tech` 检查）**
+
+- 每个**叙述型长段落（≥40 字）至少 1 处**行内强调，不得 0 强调；每段 **1–2 处**。
+- 豁免：整段为代码 / Prompt（含 `monospace` / `white-space:pre`）、图注（12px）、纯清单、确无要点的过渡句。
+- 全文最强锚点 **E4 ≤5 处**；E3 / E6 各 **≤3 处**；E5 **≤5 处**；**E7 ≤3 处，且只用于上表列举的作者自撰引导句 / 小结判断**。
+- **源文已有的标记优先保留语义**：Markdown 里 `**【素材精粹】**`、`**【适用主题】**`、`**【运用示例】**` 这类本来就是加粗的字段标签，回落为 **E1 加粗 / `<strong>` 加粗**，**不得改判为 E7 浅绿底色块**。E7 是作者给自己的引导句加的视觉层，不是给来源标签换的壳；把加粗标签套绿底属于误用。
+- 强调落在完整语义单元边界，不拆词；同一个词不得叠加两种强调，也不得同时做 3.2 词内动画。动画词是正文节奏的一部分，不是额外强调层。
+
+**明确未纳入默认白名单**（母版仅实证 1 次，或不属于正文行内强调层；不得按语义自由取用）：单独 `font-weight:bold`、`font-style:italic;text-decoration:underline`、黄色 2px 粗下划线 `border-bottom:2px solid #F2CF5B`、青绿加粗 `color:rgb(4,120,87);font-weight:700;`、Prompt 文本里的下划线、**`font-weight:800`（出现在标题 / 步骤标题 / 标签层，不是正文行内强调）**，以及引用块、卡片、`PART`、数据表格等容器（`HEADS UP` 已于 2026-11-19 恢复为 2.6 白名单条件组件，不在此列）。**用 `--theme ink-teal-tech` 校验时，这些样式一律判为 ERROR**；它们不是自造样式，而是母版里出现 1 次、主题主动排除的特例，新文章不得复制。（`CASE` 已于 2026-11-19 经用户指定 + 母版 17 处实证纳入 2.3 白名单变体，不在此列。）
+
+**渐变 WARNING 说明**：E4 / E5 / E6 是母版实证的渐变样式，须保留原样（改成纯色会破坏 1:1 母版）。校验脚本的渐变背景 WARNING 对这三类属**已知例外**：逐项确认命中白名单后保留，并在交付说明中注明可能触发 `darkmode-no-gradient` 提示；不得为消除 WARNING 擅自改色。
+
+### 4.4 文章类型 → 母版元素路由（不是组件配方）
+
+本表的作用是决定哪些内容**保持为连续正文**，而不是为每种文章凑齐一套视觉组件。除“已验证母版组件”外，均按 2.1 正文处理。
+
+| 文章类型 | 允许的母版结构 | 严禁自动补入的结构 |
+|---|---|---|
+| 案例测评 / AI 工具实测 | 封面动画 → 导语与连续正文 → 有真实截图时窗口图/图注 → 收束与 `/// END`（如母版同样使用） | `CASE`、对比表、金句/引用块、合规提示卡、伪造实测图 |
+| 产品横评 / 清单 | 封面动画 → 方法正文 → 已验证的同级条目外观（确有多个对象时）→ 真实截图/说明 → 结尾 | 为每个对象补参数卡、提示卡或动画卡；无对象时强加编号 |
+| 教程 / 工作流 | 封面动画 → 问题正文 → 已验证步骤块（步骤不可互换且有 2 个以上时）→ 真实过程截图/说明 → 结果回收 | `CASE`、`BONUS`、流程示意图、为凑节奏新增窗口图 |
+| 数据复盘 / 成本分析 | 封面动画 → 连续分析段（数据行内强调）→ 用户提供的真实表/图 → 归因 → 结尾；原文确有风险/限制时才加 2.6 `HEADS UP` | 由排版器生成数据卡、引用块、流程卡；无风险硬塞 `HEADS UP` |
+| 观点 / 随笔 / 单一项目复盘 | 封面动画 → 连续叙述 → 真实证据图（有则放）→ 收束判断 | `PART`、`MORE`、引语卡、结论卡、没有素材时伪造媒体容器 |
+
+### 4.5 密度预算与完整组件约束
+
+作者风格的重点是“阅读流里偶尔出现一个锚点”，不是把每段文字卡片化。生成时先按篇幅分配锚点，再装配组件：
+
+| 文章净正文长度 | 4.3 最强锚点 E4 | 截图证据图 | 正文词动画 |
+|---|---:|---:|---:|
+| 500 字以内 | 1–2 个 | 0–2 张 | 4–6 个 |
+| 500–1200 字 | 2–4 个 | 2–5 张 | 6–10 个 |
+| 1200 字以上 | 每 400–600 字 1 个，最多 5 个 | 只保留能改变判断的证据图 | 每 50–100 字 1 个，最多 13 个 |
+
+- 连续两段普通解释不需要加标签，应让正文自然承担节奏。
+- 同级单元必须保持相同节奏：例如产品横评的每个 `01/02/03` 均为“短判断 → 证据图（可无）→ 实测结果”，不得在其中叠加白名单外的参数卡、提醒卡。
+- **2.3 胶囊序号标题必须使用库内的完整版**：墨黑胶囊内含 14×14 小 SVG 图标，并保留 `padding:3px 9px 3px 8px`、`border-radius:12px`。不得为了省事退化成纯黑文字胶囊；后者是此前跨文章排版与 1:1 参考页观感不一致的直接原因。
+- 2.2 / 2.3 / 2.7 等白名单组件各自都要有真实的信息职责，否则回落为 2.1 正文；不可只为“看起来丰富”保留。`BONUS`、`PART`、数据表格不在白名单内，一律禁用；`CASE` 为 2.3 白名单变体、`HEADS UP` 为 2.6 白名单条件组件，均在原文有对应结构时才取用。
+
+### 4.6 结尾模式（推荐而非强制）
+
+1. **观点收束**：用 1–2 段把上文的比较或方法回收到一句可复述的判断，再放 2.7 `/// END`。
+2. **行动/更新提醒**：仅当文章确实涉及购买、版本变动、参与方式时，结论后补一段行动信息，再放 `/// END`。
+3. **署名日期**：有明确作者身份、发布期或测试日期时，`/// END` 后可追加 `{{作者名}} · {{YYYY.MM.DD}}`；否则不生成占位署名。
+
+`/// END` 是高频收束符，不是强制组件；一篇内容自然结束且原文没有结尾标志时，可省略。
+
+## 五、Markdown → 内容路由规则（封闭白名单下是「回落规则」，不是组件配方）
+
+> 这张表**不是** SKILL.md 第 4 步的「文章类型 → 组件组合配方」。它只回答一件事：**哪些内容必须保持为连续正文**。除「已验证母版组件库」2.1–2.14 外，一律回落为 2.1 正文段落 + 4.3 已验证的行内强调。
+
+| Markdown / 内容信号 | 对应路由 |
+|---|---|
+| `# 标题` | 封面场景动画（按 3.1 现场生成，绝不静态降级） |
+| 普通段落 | **2.1 正文**；逐段从 4.3 挑 1–2 个短语加已验证行内强调，长段落不得 0 强调；有画面感的词按 3.2 插入内联动画 |
+| `> 引用`、金句、补充说明 | 回落 2.1 正文；只用 4.3 行内强调，**不生成引用块 / 金句卡 / 旁注** |
+| 原文明确的风险 / 限制 / 避坑信息 | 2.6 `HEADS UP` 提示块；仅原文确有对应内容时用，骨架照抄母版 | 一般提醒硬套、为丰富版式硬塞 |
+| `第一步/第二步`、编号且不可调换、≥2 步 | 2.2 步骤块（母版已验证）；否则回落正文 |
+| 多个同级产品、工具或方案，且原文有同级条目结构 | 2.3 胶囊序号标题，标题中使用 `01/02/03`；否则回落正文，不补参数卡 |
+| `![说明](url)` 且为界面/过程截图 | 2.4 窗口式配图卡；有真实说明才接 2.5b |
+| `![说明](url)` 且为视觉成片/原图 | 2.5 纯图片块；有真实说明才接 2.5b |
+| 同一对象的多图连续对比 | 2.4 / 2.5 逐张排列；`REC` / `GIF` 标签仅在母版与原文均有相同标记时使用 |
+| Markdown 表格 | **回落为 2.1 正文**（白名单无数据表格组件）；不得生成数据卡或对比表 |
+| `- 项` / `1. 项` 列表 | 回落为 2.1 正文段落；白名单无列表组件 |
+| 围栏代码块 / Prompt 文本 | 默认回落为 2.1 正文段落；**唯一例外**：原文确有 PROMPT 滚动结构时按 2.12 `PROMPT` 块，不套窗口栏或伪证据图 |
+| `CASE` | 同级实测情境（≥2 个可比较案例 + 原文有对应结构）→ 2.3 CASE 胶囊变体；否则回落 2.1 正文（见最高优先级节第 4 条） |
+| `HEADS UP` | 原文确有风险/限制/避坑信息 → 2.6 提示块（见 2.6，白名单条件组件） |
+| 多页连续图 + `GALLERY` / 左右滑动标记 | 2.10 横向图集；有随内容变化的组名时用 2.11 内容标题轨 |
+| 大段提示词 + 滚动标记 | 2.12 `PROMPT` 滚动块；否则回落 2.1 |
+| 静帧 + 实机对照标注 | 2.13 `STILL/GIF` 标签 |
+| 成品标题 tab | 2.14 tab 式窗口卡头 |
+| `PART` / `BONUS` / `MORE` | **禁用**，不作为新文章默认组件（见最高优先级节第 4、6 条） |
+| 结论/收束段 | 先作为正文收束；只有当前母版/原文均具有收束标记时才加 2.7 `/// END`，不得为凑组件新增作者区或 CTA |
+
+## 六、装配自检（生成前后都必须执行）
+
+- **正文强调密度**：每个叙述型长段落（≥40 字）是否至少 1 处 4.3 白名单强调？交付前逐段列出「段落 → 强调词 → 所用编号」清单，**无清单不算完成**。每段 1–2 处，E4 ≤5 处，E3 / E6 / E7 各 ≤3 处，E5 ≤5 处。
+- **源文标记语义**：Markdown 里本就加粗的字段标签（`【素材精粹】`/`【适用主题】`/`【运用示例】` 等 `**xxx**`）是否保留为加粗？**不得换成 E7 绿底**；E7 只给作者自撰的引导句 / 小结判断用，且全文 ≤3 处。
+- **强调样式合规**：所有行内强调是否照抄 4.3 的 E1–E7 骨架？有没有出现白名单外样式（自造色值、`text-decoration`、把两种强调叠在同一个词上）？
+- **封闭白名单**：全文用到的结构是否都在 2.1–2.15 内？有没有引用块、卡片、`PART`、伪图注、数据表格、为凑节奏新增的标签？（`CASE` / `HEADS UP` / C8–C13 已纳入白名单，按各自触发条件取用。）
+- **A6 组件槽位**：2.11 黑底组名与帧小标题、2.12 PROMPT 标题、2.14 tab 标题是否按实际图片/内容填写，而非照抄「天文课」「NASA 模型」等原文实例？2.13 是否只在静帧+实机都有时才成对？2.15 是否固定显示「真题呈现」、标题按联考/模考名称填写、写作要求句为灰色而非强调？
+- **触发条件**：每个已验证组件，原文是否确有与母版相同的触发条件？没有就回落 2.1 正文。
+- **母版保真**：正文顶格无 `text-indent`、底边距 16px、15px 条目标题、封面 1246×220 与固定 IP 是否保持？
+- **媒体证据**：每张图是否有真实来源？没有真实图片时不创建演示数据图、流程图或窗口式伪证据图。
+- **验收脚本**：`validate_gzh_html.py --theme ink-teal-tech` 的 ERROR 是否清零？渐变 WARNING 是否逐项确认属于 E4 / E5 / E6 已知例外？
+- 结尾是否在复述了全文核心判断后收束？禁止为套 `/// END` 新编购买建议、作者信息或风险说明。
+- 完成后以“换掉标题、对象和图片仍然成立”为准验收；若拿掉具体原文内容组件就失去意义，说明它不应被写进主题默认骨架。

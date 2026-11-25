@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-style="baokuan">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>爆款原生风 模板</title>
+  <link rel="stylesheet" href="base.css">
+  <style>
+    /* ===== baokuan token（来自 style-presets.md）===== */
+    [data-style="baokuan"] {
+      --bg: #FBF6EC;
+      --ink: #211C18;
+      --ink-soft: #6B6258;
+      --accent: #F06A2E;
+      --accent-soft: #FCE3C4;
+
+      --font-display: "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-body: "PingFang SC", "Microsoft YaHei", sans-serif;
+      --pad: 64px;
+
+      --fs-cover-title: 116px;
+      --fs-h1: 64px;
+      --fs-body: 32px;
+      --fs-caption: 24px;
+      --radius: 16px;
+      --hairline: 4px;
+      --line-color: #211C18;
+    }
+
+    /* ===== baokuan 版式 ===== */
+    .poster {
+      background: var(--bg);
+      color: var(--ink);
+      padding: var(--pad);
+      font-family: var(--font-body);
+    }
+
+    /* —— 顶部角标：便利贴感 —— */
+    .bk-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 800;
+      font-size: 28px;
+      letter-spacing: 2px;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      transform: rotate(-2deg);
+      box-shadow: 6px 6px 0 var(--accent-soft);
+    }
+
+    /* —— 封面大字报标题 —— */
+    .bk-cover-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: var(--fs-cover-title);
+      line-height: 1.5;
+      letter-spacing: -1px;
+      margin-top: 48px;
+    }
+    .bk-cover-title .row { display: block; }
+    .bk-cover-title .hl {
+      color: var(--bg);
+      background: var(--accent);
+      padding: 6px 18px;
+      border-radius: 12px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .bk-cover-title .box {
+      border: var(--hairline) solid var(--ink);
+      padding: 4px 16px;
+      border-radius: 12px;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .bk-cover-title .wave {
+      position: relative;
+      display: inline-block;
+    }
+    .bk-cover-title .wave::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 4px;
+      height: 14px;
+      background:
+        radial-gradient(circle at 12px 0, transparent 12px, var(--accent) 13px) 0 0 / 24px 14px repeat-x;
+      opacity: .85;
+    }
+
+    /* —— 手绘箭头 —— */
+    .bk-arrow {
+      position: absolute;
+      right: 64px;
+      top: 360px;
+      width: 140px;
+      transform: rotate(8deg);
+    }
+
+    /* —— 封面副述 —— */
+    .bk-sub {
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin-top: 52px;
+      max-width: 84%;
+    }
+
+    /* —— 内容页：编号要点卡 —— */
+    .bk-h1 {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: var(--fs-h1);
+      line-height: 1.15;
+      margin-top: 24px;
+    }
+    .bk-h1 .hl {
+      color: var(--accent);
+    }
+    .bk-list {
+      margin-top: 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .bk-item {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      background: #fff;
+      border: 3px solid var(--ink);
+      border-radius: var(--radius);
+      padding: 30px 32px;
+      box-shadow: 8px 8px 0 var(--accent-soft);
+    }
+    .bk-num {
+      flex: none;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bk-item-body { flex: 1; }
+    .bk-item-title {
+      font-weight: 800;
+      font-size: 40px;
+      line-height: 1.25;
+    }
+    .bk-item-desc {
+      font-size: var(--fs-body);
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+
+    /* —— 底栏 —— */
+    .bk-foot {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-top: 40px;
+    }
+    .bk-foot .dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .bk-foot .name {
+      font-weight: 800;
+      font-size: var(--fs-caption);
+      color: var(--ink);
+    }
+    .bk-foot .hint {
+      margin-left: auto;
+      font-size: var(--fs-caption);
+      color: var(--ink-soft);
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+
+    <!-- ===== 封面页 ===== -->
+    <section class="poster">
+      <span class="bk-tag">新手养猫翻车实录 ✦</span>
+
+      <h1 class="bk-cover-title">
+        <span class="row">第一次养猫</span>
+        <span class="row">这 <span class="hl">6 个坑</span></span>
+        <span class="row">我全踩了</span>
+        <span class="row"><span class="box">一遍</span></span>
+      </h1>
+
+      <svg class="bk-arrow" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 18 C70 4 130 30 138 78" stroke="#F06A2E" stroke-width="7" stroke-linecap="round"/>
+        <path d="M138 78 L118 70 M138 78 L130 56" stroke="#F06A2E" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+
+      <p class="bk-sub">半夜挂急诊换来的经验，第 2 个坑差点把猫送进医院 🐾</p>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@第一次养猫的人</span>
+        <span class="hint">往下滑 一条条看 →</span>
+      </div>
+    </section>
+
+    <!-- POSTERS_HERE: 复制 .poster 区块来增加页数 -->
+
+    <!-- ===== P2 误区vs真相：猫砂 ===== -->
+    <section class="poster">
+      <span class="bk-tag">坑 1 · 猫砂选错</span>
+
+      <h2 class="bk-h1">家里跟下了<span class="hl">一层雾</span><br>就因为猫砂选错了</h2>
+
+      <div style="display:flex; gap:32px; margin-top:52px; flex:1;">
+        <div style="flex:1; border-radius: var(--radius); padding: 40px 32px; border: var(--hairline) solid var(--line-color); display:flex; flex-direction:column;">
+          <div style="font-size:28px; color:var(--ink-soft); letter-spacing:4px;">我图便宜买的</div>
+          <div style="font-size: var(--fs-h1); font-weight:800; margin-top:20px;">粉尘矿物砂</div>
+          <p style="font-size: var(--fs-body); color: var(--ink-soft); margin-top:24px; line-height:1.7;">猫一上厕所家里就跟起雾一样，猫打喷嚏，我也开始过敏，每天扫地像在打仗。</p>
+        </div>
+        <div style="flex:1; border-radius: var(--radius); padding: 40px 32px; background: var(--accent-soft); display:flex; flex-direction:column;">
+          <div style="font-size:28px; color:var(--accent); letter-spacing:4px;">换了之后</div>
+          <div style="font-size: var(--fs-h1); font-weight:800; margin-top:20px;">豆腐砂</div>
+          <p style="font-size: var(--fs-body); color: var(--ink-soft); margin-top:24px; line-height:1.7;">几乎没尘，结块清楚，铲屎一目了然，差价那点钱真不如早换，省下来的医药费够买好几袋。</p>
+        </div>
+      </div>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@第一次养猫的人</span>
+        <span class="hint">下一页更扎心 →</span>
+      </div>
+    </section>
+
+    <!-- ===== P3 编号要点卡：换粮/磨爪/疫苗 ===== -->
+    <section class="poster">
+      <span class="bk-tag">坑 2-4 · 这 3 件事别学我</span>
+
+      <h2 class="bk-h1">接猫回家那一周<span class="hl">最容易翻车</span></h2>
+
+      <div class="bk-list">
+        <div class="bk-item">
+          <div class="bk-num">2</div>
+          <div class="bk-item-body">
+            <div class="bk-item-title">猫粮别一天全换</div>
+            <div class="bk-item-desc">我当天直接全换新粮，猫吐了两次拉了三天。换粮要 7 天以上慢慢混，比例每天加一点。</div>
+          </div>
+        </div>
+        <div class="bk-item">
+          <div class="bk-num">3</div>
+          <div class="bk-item-body">
+            <div class="bk-item-title">提前买猫抓板</div>
+            <div class="bk-item-desc">磨爪是天性，不给地方它就找你最贵的家具。我家沙发角已经废了。</div>
+          </div>
+        </div>
+        <div class="bk-item">
+          <div class="bk-num">4</div>
+          <div class="bk-item-body">
+            <div class="bk-item-title">第一周就排好疫苗时间表</div>
+            <div class="bk-item-desc">我拖到半岁才想起来，免疫程序乱了还得重新打。接回家先去体检，顺便让医生排好表。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@第一次养猫的人</span>
+        <span class="hint">还有 2 个坑 →</span>
+      </div>
+    </section>
+
+    <!-- ===== P4 清单勾选：砂盆摆放 ===== -->
+    <section class="poster">
+      <span class="bk-tag">坑 5 · 砂盆这么放</span>
+
+      <h2 class="bk-h1">猫不愿意进砂盆<br>多半是<span class="hl">位置和数量</span>的事</h2>
+
+      <ul style="margin-top:48px; flex:1; display:flex; flex-direction:column; justify-content:space-evenly; list-style:none;">
+        <li style="display:flex; gap:24px; align-items:flex-start;">
+          <span style="flex:none; width:48px; height:48px; border-radius:50%; border: var(--hairline) solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:28px;">✓</span>
+          <span style="font-size: var(--fs-body); line-height:1.5;">数量按"猫的数量 + 1"放，一只猫至少 2 个砂盆</span>
+        </li>
+        <li style="display:flex; gap:24px; align-items:flex-start;">
+          <span style="flex:none; width:48px; height:48px; border-radius:50%; border: var(--hairline) solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:28px;">✓</span>
+          <span style="font-size: var(--fs-body); line-height:1.5;">放在安静角落，别挨着洗衣机、空调外机这类噪音源</span>
+        </li>
+        <li style="display:flex; gap:24px; align-items:flex-start;">
+          <span style="flex:none; width:48px; height:48px; border-radius:50%; border: var(--hairline) solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:28px;">✓</span>
+          <span style="font-size: var(--fs-body); line-height:1.5;">分散摆放，别都堆在一个房间，给猫多个选择</span>
+        </li>
+        <li style="display:flex; gap:24px; align-items:flex-start;">
+          <span style="flex:none; width:48px; height:48px; border-radius:50%; border: var(--hairline) solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:28px;">✓</span>
+          <span style="font-size: var(--fs-body); line-height:1.5;">猫在角落乱尿，先检查砂盆位置，别急着觉得它"不乖"</span>
+        </li>
+        <li style="display:flex; gap:24px; align-items:flex-start;">
+          <span style="flex:none; width:48px; height:48px; border-radius:50%; border: var(--hairline) solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:28px;">✓</span>
+          <span style="font-size: var(--fs-body); line-height:1.5;">猫砂别突然换牌子，混着用几天再彻底换，猫的鼻子很敏感</span>
+        </li>
+      </ul>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@第一次养猫的人</span>
+        <span class="hint">最后一个坑最容易忽略 →</span>
+      </div>
+    </section>
+
+    <!-- ===== P5 引用金句：陪伴误区 ===== -->
+    <section class="poster">
+      <span class="bk-tag">坑 6 · 最容易被忽略</span>
+
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div style="font-size:120px; color: var(--accent-soft); line-height:1; font-family: var(--font-display);">"</div>
+        <p style="font-family: var(--font-display); font-weight:800; font-size: var(--fs-h1); line-height:1.45; margin-top:-20px;">
+          猫比想象中需要陪伴<br>只是<span class="hl">表达方式不一样</span>
+        </p>
+        <p style="font-size: var(--fs-body); color: var(--ink-soft); margin-top:40px; line-height:1.7;">我以为猫很独立，不用怎么管。结果我加班那段时间，它开始抓沙发、半夜叫、不爱吃饭。</p>
+        <p style="font-size: var(--fs-body); color: var(--ink-soft); margin-top:24px; line-height:1.7;">后来每天固定花十几分钟陪它玩逗猫棒，<span class="hl">这些行为基本都消失了</span>。</p>
+      </div>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@第一次养猫的人</span>
+        <span class="hint">最后一页 总结来了 →</span>
+      </div>
+    </section>
+
+    <!-- ===== P6 总结卡 + CTA ===== -->
+    <section class="poster">
+      <span class="bk-tag">6 个坑 一张图记住</span>
+
+      <h2 class="bk-h1">接猫回家前<br>把这张图<span class="hl">存一下</span></h2>
+
+      <div style="margin-top:48px; display:flex; flex-wrap:wrap; gap:20px;">
+        <span style="padding:16px 28px; border-radius: var(--radius); background: var(--accent-soft); font-size: var(--fs-body); font-weight:700;">豆腐砂别省</span>
+        <span style="padding:16px 28px; border-radius: var(--radius); background: var(--accent-soft); font-size: var(--fs-body); font-weight:700;">换粮 7 天过渡</span>
+        <span style="padding:16px 28px; border-radius: var(--radius); background: var(--accent-soft); font-size: var(--fs-body); font-weight:700;">先买猫抓板</span>
+        <span style="padding:16px 28px; border-radius: var(--radius); background: var(--accent-soft); font-size: var(--fs-body); font-weight:700;">第一周排疫苗表</span>
+        <span style="padding:16px 28px; border-radius: var(--radius); background: var(--accent-soft); font-size: var(--fs-body); font-weight:700;">砂盆 N+1</span>
+        <span style="padding:16px 28px; border-radius: var(--radius); background: var(--accent-soft); font-size: var(--fs-body); font-weight:700;">每天陪玩 10 分钟</span>
+      </div>
+
+      <p style="font-size: var(--fs-body); color: var(--ink-soft); margin-top:48px; line-height:1.8;">
+        这些都是真金白银和半夜挂急诊换来的。你养猫踩过哪个坑？评论区告诉我，攒够了出二期。
+      </p>
+
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:32px;">
+        <div style="border-top: var(--hairline) solid var(--line-color); padding-top:36px;">
+          <p style="font-size: var(--fs-h1); font-weight:800; line-height:1.4;">没有十全十美的准备<br>只有<span class="hl">边养边改</span>的过程</p>
+          <p style="font-size: var(--fs-body); color: var(--ink-soft); margin-top:24px; line-height:1.7;">写这篇的时候我家猫已经满一岁了，回头看，这 6 个坑当时随便填一个，可能就少花一半的钱。</p>
+        </div>
+      </div>
+
+      <div class="foot bk-foot">
+        <span class="dot"></span>
+        <span class="name">@第一次养猫的人</span>
+        <span class="hint">评论区蹲第二期 ↓</span>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

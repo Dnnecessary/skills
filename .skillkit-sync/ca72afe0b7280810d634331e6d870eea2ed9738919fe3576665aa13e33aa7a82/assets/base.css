@@ -1,0 +1,139 @@
+/* ==========================================================================
+   共享底座 base.css
+   职责：只负责结构与渲染一致性（画布尺寸、安全区、复位、字体兜底、截图脚手架、质感层）。
+   不含任何风格化配色（不设配色主题）——这些由各风格层负责。
+   所有风格层应在 base.css 之后引入，通过覆盖下方 CSS 变量来定制视觉。
+   ========================================================================== */
+
+/* --------------------------------------------------------------------
+   展示字体：得意黑 Smiley Sans（免费商用，随 Skill 附带）
+   字体文件在 assets/fonts/ 下。复制 base.css 到任务目录时，
+   fonts/ 目录需一并带上（见 production-workflow.md）。
+   更多可选字体的获取见 typography-and-texture.md。
+   -------------------------------------------------------------------- */
+@font-face {
+  font-family: "Smiley Sans";
+  src: url("fonts/SmileySans-Oblique.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal; /* 字形本身带倾斜，这里声明 normal 便于直接调用 */
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------
+   Token：风格层可覆盖的变量
+   -------------------------------------------------------------------- */
+:root {
+  /* 安全区内边距：风格层可整体调整画布留白 */
+  --pad: 72px;
+
+  /* 字体栈：风格层可覆盖为具体的展示字体 / 正文字体，
+     但必须保留中文兜底，避免中文渲染缺字 */
+  --font-display: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-body: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* --------------------------------------------------------------------
+   复位：避免浏览器默认样式影响布局一致性
+   -------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+figure {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* --------------------------------------------------------------------
+   3:4 画布
+   小红书图文标准比例 3:4，截图基准尺寸 1080 × 1440（像素）。
+   每个 .poster 即一张最终导出的卡片。
+   -------------------------------------------------------------------- */
+.poster {
+  width: 1080px;
+  height: 1440px;
+  overflow: hidden; /* 防止内容溢出画布边界 */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  /* 字体兜底，风格层可通过覆盖 --font-body / --font-display 调整外观 */
+  font-family: var(--font-body);
+}
+
+/* --------------------------------------------------------------------
+   安全区与底栏
+   - .poster 的内边距统一使用 --pad token，风格层可整体调节。
+   - .foot 通过 flex 的 margin-top:auto 被推到底部，
+     会随上方内容增长自然下移，不会压住增长中的内容。
+     【禁止】使用 position:absolute 固定底栏位置。
+   -------------------------------------------------------------------- */
+.foot {
+  margin-top: auto;
+}
+
+/* --------------------------------------------------------------------
+   最小可读字号守则（小红书移动端可读基准，仅作注释规范，不直接设置全局字号）
+   - 正文字号 ≥ 28px
+   - 注脚 / 辅助文字字号 ≥ 22px
+   各风格层在定义正文与注脚样式时，应遵循以上下限，确保移动端可读性。
+   -------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------
+   截图脚手架
+   - .stage：预览容器，纵向排列多张 .poster，便于本地预览整套图文。
+   - body 背景色仅用于预览时区分画布边界，截图时只截取 .poster 节点，
+     不会包含此背景。
+   -------------------------------------------------------------------- */
+body {
+  background: #e5e5e5; /* 仅预览底色，不参与最终截图 */
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 40px 0;
+}
+
+/* --------------------------------------------------------------------
+   质感层（texture）
+   目的：把"纯色平涂"提升到"有材质的高级感"。默认给每张 .poster
+   叠一层极细噪点（纸感 / 胶片感），并提供几个可选的质感工具类。
+   风格层在模板里按需叠加渐变、光晕、暗角。
+   -------------------------------------------------------------------- */
+
+/* 全局细噪点：overlay 混合在亮底/暗底上都能产生微弱颗粒，避免死板平涂。
+   z-index 较高但 pointer-events:none，不影响交互；opacity 很低不伤可读性。 */
+.poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* 暗角：给深色背景（如 minimal）增加纵深，四周轻微压暗、聚焦中心。
+   inset box-shadow 画在背景之上、内容之下，安全不盖字。 */
+.tex-vignette {
+  box-shadow: inset 0 0 240px rgba(0, 0, 0, 0.38);
+}
+
+/* 柔投影 token：给卡片/图位用的柔和阴影（magazine / ambient 的"高级感"靠它，
+   而不是 baokuan 那种硬投影）。模板里按需 box-shadow: var(--shadow-soft)。 */
+:root { --shadow-soft: 0 18px 50px rgba(33, 28, 24, 0.10); }
+
+/* 光晕 / 渐变请在风格层用 .poster 的 background 叠加，例如：
+     background: radial-gradient(60% 45% at 82% 12%, rgba(255,255,255,.5), transparent 70%), var(--bg);
+   作为背景绘制，永远在内容之下，不需要处理 z-index。 */

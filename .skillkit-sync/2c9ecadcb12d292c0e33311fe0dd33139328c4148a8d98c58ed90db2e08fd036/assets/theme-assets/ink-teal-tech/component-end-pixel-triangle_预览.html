@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>component-end-pixel-triangle · 公众号排版预览</title>
+<style>
+  body{margin:0;background:#eef0f2;font-family:'Source Han Sans SC','思源黑体','PingFang SC','Hiragino Sans GB','Microsoft YaHei',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-text-size-adjust:100%;}
+  .gzh-toolbar{position:fixed;top:0;left:0;right:0;height:54px;background:#ffffff;box-shadow:0 1px 10px rgba(0,0,0,.08);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:99;}
+  .gzh-hint{font-size:13px;color:#6b7280;line-height:1.4;}
+  .gzh-hint b{color:#111827;}
+  .gzh-copy{background:#059669;color:#fff;border:0;border-radius:9px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(5,150,105,.28);white-space:nowrap;transition:transform .08s,background .15s;}
+  .gzh-copy:hover{background:#047857;}
+  .gzh-copy:active{transform:translateY(1px);}
+  .gzh-toast{position:fixed;top:66px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:11px 20px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s;z-index:100;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:88vw;text-align:center;}
+  .gzh-toast.show{opacity:1;}
+  .gzh-stage{max-width:700px;margin:78px auto 64px;padding:0 8px;}
+  @media(max-width:520px){.gzh-hint{max-width:150px;}}
+</style>
+</head>
+<body>
+<div class="gzh-toolbar">
+  <span class="gzh-hint">👇 下方是排版效果 · 点右侧 <b>复制</b> 直接粘到公众号</span>
+  <button class="gzh-copy" id="gzhCopyBtn" onclick="gzhCopy()">📋 复制到公众号</button>
+</div>
+<div class="gzh-toast" id="gzhToast"></div>
+<div class="gzh-stage">
+  <div id="gzh-content">
+<!--
+  组件：结尾符 /// END · 动画像素三角（正式默认）
+  来源：同作者原文 `10_以为工作是为了好好生活，结果活成了_只有工作_.html`，2026-11-25 用户确认恢复并固化。
+  规格：22×16 SVG；8 个 4×4 像素块，顶部 1 黄；中层绿黄绿；底层黄绿黄绿；黄 #F2CF5B / 绿 #047857。
+  动效：8 个像素块各自沿 Y 轴上下浮动（1.6–2.4s），SVG 整体 translateY(-8px) 与灰线对齐。
+  调用：仅在原文有收束标记或文章自然收束且主题确认适配时使用。不得手拼、缩放或替换为静态 8×8 方块版本。
+-->
+<section style="padding:0px 12px;"><section style="margin:0px;"><section style="display:flex;align-items:center;gap:8px;"><span style="font-family:Georgia,&quot;Times New Roman&quot;,serif;font-size:11px;font-style:italic;color:#9CA3AF;letter-spacing:2px;"><span leaf="">/// END</span></span><section style="display:flex;align-items:center;gap:6px;flex:1 1 0%;min-width:0px;"><span style="flex:1 1 0%;height:1px;background:#E5E7EB;line-height:0;font-size:0px;"><span leaf=""><br></span></span><svg xmlns="http://www.w3.org/2000/svg" width="22" height="16" viewBox="0 0 22 16" shape-rendering="crispEdges" style="display:inline-block;vertical-align:middle;flex-shrink:0;overflow:visible;transform:translateY(-8px);"><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 -1; 0 0; 0 1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="2.1s" repeatCount="indefinite"></animateTransform><path fill="#F2CF5B" d="M9 0h4v4h-4z"></path></g><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 1; 0 0; 0 -1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="1.7s" repeatCount="indefinite"></animateTransform><path fill="#047857" d="M3 6h4v4h-4z"></path></g><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 -1; 0 0; 0 1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="2.4s" repeatCount="indefinite"></animateTransform><path fill="#F2CF5B" d="M9 6h4v4h-4z"></path></g><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 1; 0 0; 0 -1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="1.9s" repeatCount="indefinite"></animateTransform><path fill="#047857" d="M15 6h4v4h-4z"></path></g><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 -1; 0 0; 0 1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="2.2s" repeatCount="indefinite"></animateTransform><path fill="#F2CF5B" d="M0 12h4v4h-4z"></path></g><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 1; 0 0; 0 -1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="1.6s" repeatCount="indefinite"></animateTransform><path fill="#047857" d="M6 12h4v4h-4z"></path></g><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 -1; 0 0; 0 1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="2.3s" repeatCount="indefinite"></animateTransform><path fill="#F2CF5B" d="M12 12h4v4h-4z"></path></g><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 1; 0 0; 0 -1; 0 0" keyTimes="0; .25; .5; .75; 1" calcMode="spline" keySplines=".4 0 .6 1; .4 0 .6 1; .4 0 .6 1; .4 0 .6 1" dur="1.8s" repeatCount="indefinite"></animateTransform><path fill="#047857" d="M18 12h4v4h-4z"></path></g></svg></section></section></section></section>
+  </div>
+</div>
+<script>
+  function gzhShowToast(msg){
+    var t=document.getElementById('gzhToast');
+    t.textContent=msg;t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer=setTimeout(function(){t.classList.remove('show');},2800);
+  }
+  function gzhCopy(){
+    var el=document.getElementById('gzh-content');
+    var html=el.innerHTML;
+    var text=el.innerText;
+    var btn=document.getElementById('gzhCopyBtn');
+    var ok=false;
+    var handler=null;
+    var ta=document.createElement('textarea');
+    try{
+      // Write the original HTML directly to avoid browser range serialization
+      // injecting values such as text-align:start into the copied markup.
+      handler=function(e){
+        if(!e.clipboardData)return;
+        e.clipboardData.setData('text/html',html);
+        e.clipboardData.setData('text/plain',text);
+        e.preventDefault();
+      };
+      document.addEventListener('copy',handler,{once:true});
+      ta.value=text;
+      ta.setAttribute('readonly','');
+      ta.style.position='fixed';
+      ta.style.left='-9999px';
+      ta.style.top='0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ok=document.execCommand('copy');
+    }catch(e){
+      ok=false;
+    }finally{
+      if(ta.parentNode)ta.parentNode.removeChild(ta);
+      if(handler)document.removeEventListener('copy',handler);
+    }
+    if(ok){
+      gzhShowToast('✅ 已复制！去公众号编辑器按 Ctrl/⌘+V 粘贴即可');
+      var old=btn.textContent;btn.textContent='✅ 已复制';
+      setTimeout(function(){btn.textContent=old;},2200);
+    }else{
+      gzhShowToast('⚠ 浏览器阻止复制，请换 Edge/Chrome 后重试');
+    }
+  }
+</script>
+</body>
+</html>
