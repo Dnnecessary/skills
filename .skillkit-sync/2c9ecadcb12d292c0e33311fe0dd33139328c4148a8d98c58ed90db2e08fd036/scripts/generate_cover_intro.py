@@ -41,11 +41,13 @@ KS_MOTION = ("0.77 0 0.175 1;" * 7).rstrip(";")
 KT_OPACITY = "0;.155;.20;.925;.97;1"
 SP_OPACITY = "0.45 0 0.55 1"
 
-# 排布（1246 宽画布，IP 右缘约 x=142）
-START_X = 170.0           # 第一个字位左缘 x
+# 排布（1246 宽画布；已验收为 IP 与介绍语、介绍语与右侧留白近似对称）
+# 当前 16×16 点阵实际步长为 3.396875：首组中心 x=285.17，最后组中心 x=1124.83。
+# 不得回退到旧的 START_X=170 / step=3.9，否则会再次造成 IP 右侧拥挤、画布右侧留白过大。
+START_X = 258.0
 HOME_TOP_Y = 112.0        # 整行字中心 y（原 90 偏上，用户要求整体下调；IP 中心≈118）
 COMMA_SLOT_RATIO = 0.45   # 逗号字位宽度（原 1.0 会让前后半句之间空出一大块）
-SCATTER_X0, SCATTER_DX = 300.0, 69.0   # 飞散终点 x 起点/步长
+SCATTER_X0, SCATTER_DX = 382.0, 69.0   # 飞散终点 x 起点/步长；与居中布局同步
 SCATTER_Y0, SCATTER_DY = 148.0, -7.0   # 飞散终点 y 起点/步长
 SCATTER_CYCLE = 11        # 每 11 组回到起点（与母版两轮飞散同构）
 
@@ -187,7 +189,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("text", help="介绍语文案")
     ap.add_argument("--out", help="输出 XML 文件（默认 stdout）")
-    ap.add_argument("--step", type=float, default=3.9, help="点阵步长（默认 3.9，17 字排进画布）")
+    ap.add_argument("--step", type=float, default=3.396875, help="点阵步长（默认 3.396875，匹配已验收的居中布局）")
     args = ap.parse_args()
     xml, n = build(args.text, args.step)
     if args.out:
