@@ -17,6 +17,16 @@
       "payload": "ff690a40faa65950b91bf5388b2f886f08410e05ab2a39474e799854d588c4e3"
     },
     {
+      "tool": "gemini",
+      "relative": "guizang-social-card-skill",
+      "payload": "f24620de0531749c9b5a48fcdc87f612983ba1a85a358968e944a67c5fa9f334"
+    },
+    {
+      "tool": "global",
+      "relative": "guizang-social-card-skill",
+      "payload": "5a9cca87d63b71c02a1837e90b8769b01df384468631d8dc4d4fea69c8af77db"
+    },
+    {
       "tool": "workbuddy",
       "relative": "agent-reach",
       "payload": "fcc5cb404ca4ddc52c09c980e3b1251908aaa7b21a85a647b21890fdc7557881"
@@ -40,6 +50,11 @@
       "tool": "workbuddy",
       "relative": "easyunslop",
       "payload": "a145d8e1db85110a4d71259e4a5d1c70bb0270be84d866439908856f9724e09f"
+    },
+    {
+      "tool": "workbuddy",
+      "relative": "guizang-social-card-skill",
+      "payload": "8a55e0024ebf518109610e88e3274eb80b08be887ffd2d2015f20c2aa3a0e0ef"
     },
     {
       "tool": "workbuddy",
